@@ -8,6 +8,15 @@
     <artifactId>YUNOPay</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <sonar.login>67f279ab2accb9f55e3d90f07513f4ac06fa8542</sonar.login>
+        <sonar.host.url>http://costa.ls.fi.upm.es:9000/sonar</sonar.host.url>
+        <sonar.projectName>${groupId}:${artifactId}</sonar.projectName>
+        <sonar.projectKey>${groupId}:${artifactId}:${sonar.login}</sonar.projectKey>
+    </properties>
+
+
+
     <build>
         <plugins>
             <plugin>
@@ -18,6 +27,48 @@
                     <source>8</source>
                     <target>8</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.3.0.603</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sonar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.9</version>
+                <configuration>
+                    <append>true</append>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>prepare-agent-integration</id>
+                        <goals>
+                            <goal>prepare-agent-integration</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-site</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
