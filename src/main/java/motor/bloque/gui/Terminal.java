@@ -8,7 +8,7 @@ public class Terminal {
     public static void mainMenu(){
         boolean exit = false;
         while(!exit) {
-            System.out.println("Main menu");
+            System.out.println("YUNO menu");
             System.out.println("---------------");
             System.out.println("Select an operation:");
             System.out.println("1. Buy a card");

@@ -7,16 +7,18 @@ import motor.bloque.interfaces.Card;
 import motor.bloque.interfaces.Movement;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Main {
+public class YUNO {
 
-    private static List cards;
+    private static Map cards;
     private static List movements;
 
     public static void main(String[] args){
         cards = Persistence.getCards();
-        if (cards == null) cards = new ArrayList<Card>();
+        if (cards == null) cards = new HashMap<Integer, Card>();
         movements = Persistence.getMovements();
         if (movements == null) movements = new ArrayList<Movement>();
 

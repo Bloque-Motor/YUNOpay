@@ -18,7 +18,7 @@ public class Persistence {
     public Persistence(){}
 
 
-    public static List getCards() {
+    public static Map getCards() {
         return null;
     }
 
@@ -26,7 +26,7 @@ public class Persistence {
         return null;
     }
 
-    public static void saveCards(List cards) {
+    public static void saveCards(Map cards) {
     }
 
     public static void saveMovements(List movements) {
