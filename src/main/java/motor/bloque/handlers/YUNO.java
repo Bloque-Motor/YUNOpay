@@ -13,18 +13,13 @@ import java.util.Map;
 
 public class YUNO {
 
-    private static Map cards;
-    private static List movements;
+    public static Persistence persistence;
 
     public static void main(String[] args){
-        cards = Persistence.getCards();
-        if (cards == null) cards = new HashMap<Integer, Card>();
-        movements = Persistence.getMovements();
-        if (movements == null) movements = new ArrayList<Movement>();
+        persistence = new Persistence();
 
         //Provisional
         Terminal.mainMenu();
-        if (!cards.isEmpty()) Persistence.saveCards(cards);
-        if (!movements.isEmpty()) Persistence.saveMovements(movements);
+        persistence.saveAll();
     }
 }

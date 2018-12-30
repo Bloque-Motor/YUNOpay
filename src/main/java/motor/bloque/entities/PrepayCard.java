@@ -17,8 +17,23 @@ public class PrepayCard implements Card {
     }
 
     @Override
-    public boolean setPIN() {
+    public boolean setPIN(int oldPIN, int newPIN) {
         return false;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public int getNumber() {
+        return 0;
+    }
+
+    @Override
+    public byte[] getHashedPIN() {
+        return new byte[0];
     }
 
     @Override
