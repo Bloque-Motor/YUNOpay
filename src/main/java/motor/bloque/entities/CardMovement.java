@@ -2,11 +2,14 @@ package motor.bloque.entities;
 
 import motor.bloque.interfaces.Movement;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 //TODO: this class is for logging movements for later retrieval.
 
 public class CardMovement implements Movement {
+
+    public CardMovement(){};
+
     @Override
     public void setAmount(int amount) {
 
@@ -18,7 +21,7 @@ public class CardMovement implements Movement {
     }
 
     @Override
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
 
     }
 
@@ -33,7 +36,7 @@ public class CardMovement implements Movement {
     }
 
     @Override
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return null;
     }
 }

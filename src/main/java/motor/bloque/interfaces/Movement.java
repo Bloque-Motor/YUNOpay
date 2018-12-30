@@ -1,13 +1,13 @@
 package motor.bloque.interfaces;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public interface Movement {
 
     void setAmount(int amount);
     void setRemainingBalance(int remainingBalance);
-    void setDate(Date date);
+    void setDate(LocalDateTime date);
     int getAmount();
     int getRemainingBalance();
-    Date getDate();
+    LocalDateTime getDate();
 }

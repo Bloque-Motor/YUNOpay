@@ -1,8 +1,9 @@
 package motor.bloque.handlers;
 
 //TODO: this class will handle file read and write operations
-//I personally suggest writing JSON objects as plain text for persistence
 
+import motor.bloque.entities.CardMovement;
+import motor.bloque.entities.PrepayCard;
 import motor.bloque.interfaces.Card;
 import motor.bloque.interfaces.Movement;
 import org.json.JSONArray;
@@ -13,10 +14,8 @@ import java.io.BufferedWriter;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class Persistence {
 
@@ -30,8 +29,31 @@ public class Persistence {
         }else {
             JSONTokener tokener = new JSONTokener(is);
             JSONObject data = new JSONObject(tokener);
+            Iterator<String> it = data.keys();
+            while(it.hasNext()) {
+                String key = it.next();
+                if (data.get(key) instanceof JSONObject) {
+                    JSONObject cardJSON = (JSONObject) data.get(key);
+                    Card card = new PrepayCard();
+                    card.setName(cardJSON.getString("name"));
+                    card.setNumber(cardJSON.getInt("number"));
+                    card.setHashedPIN(cardJSON.getString("hashedPIN").getBytes());
+                    card.setBalance(cardJSON.getInt("balance"));
 
-            //TODO: extract relevant data from JSON into Card objects to put on Map
+                    List<Movement> movements = new ArrayList<>();
+                    JSONArray movementsJSON = cardJSON.getJSONArray("movements");
+                    for (int i = 0; i < movementsJSON.length(); i++){
+                        JSONObject moveJSON = (JSONObject) movementsJSON.get(i);
+                        Movement move = new CardMovement();
+                        move.setAmount(moveJSON.getInt("amount"));
+                        move.setDate(LocalDateTime.parse(moveJSON.getString("date")));
+                        move.setRemainingBalance(moveJSON.getInt("remainingBalance"));
+                        movements.add(move);
+                    }
+                    card.setMovements(movements);
+                    cards.put(card.getNumber(), card);
+                }
+            }
         }
     }
 
@@ -44,11 +66,11 @@ public class Persistence {
             JSONObject cardDetails = new JSONObject();
             cardDetails.put("name", card.getName());
             cardDetails.put("number", card.getNumber());
-            cardDetails.put("hashedPIN", card.getHashedPIN());
-            cardDetails.put("balance", card.checkBalance());
+            cardDetails.put("hashedPIN", Hasher.bytesToHex(card.getHashedPIN()));
+            cardDetails.put("balance", card.getBalance());
 
             JSONArray movementJSON = new JSONArray();
-            List<Movement> moves = card.checkMovements();
+            List<Movement> moves = card.getMovements();
 
             for (Movement move : moves){
                 JSONObject moveJSON = new JSONObject();
