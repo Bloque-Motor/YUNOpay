@@ -6,6 +6,44 @@ import motor.bloque.interfaces.*;
 import java.util.List;
 
 public class PrepayCard implements Card {
+
+    public PrepayCard(){};
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public int getNumber() {
+        return 0;
+    }
+
+    @Override
+    public byte[] getHashedPIN() {
+        return new byte[0];
+    }
+
+    @Override
+    public int getBalance() {
+        return 0;
+    }
+
+    @Override
+    public List<Movement> getMovements() {
+        return null;
+    }
+
+    @Override
+    public boolean changePIN(int oldPIN, int newPIN) {
+        return false;
+    }
+
+    @Override
+    public boolean recharge(int amount) {
+        return false;
+    }
+
     @Override
     public void setName(String name) {
 
@@ -17,22 +55,19 @@ public class PrepayCard implements Card {
     }
 
     @Override
-    public boolean setPIN() {
-        return false;
+    public void setHashedPIN(byte[] hashedPIN) {
+
     }
 
     @Override
-    public boolean recharge(int amount) {
-        return false;
+    public void setBalance(int balance) {
+
     }
 
     @Override
-    public int checkBalance() {
-        return 0;
+    public void setMovements(List<Movement> movements) {
+
     }
 
-    @Override
-    public List<Movement> checkMovements() {
-        return null;
-    }
+
 }

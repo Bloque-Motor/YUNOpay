@@ -4,10 +4,20 @@ import java.util.List;
 
 public interface Card {
 
+    String getName();
+    int getNumber();
+    byte[] getHashedPIN();
+    int getBalance();
+    List<Movement> getMovements();
+
+    boolean changePIN(int oldPIN, int newPIN);
+    boolean recharge(int amount);
+
     void setName(String name);
     void setNumber(int number);
-    boolean setPIN();
-    boolean recharge(int amount);
-    int checkBalance();
-    List<Movement> checkMovements();
+    void setHashedPIN(byte[] hashedPIN);
+    void setBalance(int balance);
+    void setMovements(List<Movement> movements);
+
+
 }
