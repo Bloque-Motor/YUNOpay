@@ -11,8 +11,9 @@ public interface Card {
     int getBalance();
     List<Movement> getMovements();
 
-    boolean changePIN(int oldPIN, int newPIN);
-    boolean recharge(int amount);
+    boolean changePIN(String oldPIN, String newPIN);
+    boolean recharge(int amount, String PIN);
+    boolean addMovement(String PIN, int amount);
 
     void setName(String name);
     void setNumber(int number);

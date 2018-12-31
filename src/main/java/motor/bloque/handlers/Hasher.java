@@ -13,14 +13,18 @@ public class Hasher {
 
     private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 
-    public static Map<String, String> hashNewPassword(String passwordToHash) throws NoSuchAlgorithmException
-    {
-        byte[] salt = getSalt();
-        String securePassword = getSecurePassword(passwordToHash, salt);
-        Map<String, String> map = new HashMap<>();
-        map.put("password", securePassword);
-        map.put("salt", bytesToHex(salt));
-        return map;
+    public static Map<String, String> hashNewPassword(String passwordToHash){
+        try {
+            byte[] salt = getSalt();
+            String securePassword = getSecurePassword(passwordToHash, salt);
+            Map<String, String> map = new HashMap<>();
+            map.put("password", securePassword);
+            map.put("salt", bytesToHex(salt));
+            return map;
+        }catch (NoSuchAlgorithmException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static boolean validatePassword(String password, int cardNumber) throws NoSuchCard{
