@@ -20,8 +20,13 @@ public class PrepayCard implements Card {
     }
 
     @Override
-    public byte[] getHashedPIN() {
-        return new byte[0];
+    public String getHashedPIN() {
+        return null;
+    }
+
+    @Override
+    public String getSalt() {
+        return null;
     }
 
     @Override
@@ -55,7 +60,12 @@ public class PrepayCard implements Card {
     }
 
     @Override
-    public void setHashedPIN(byte[] hashedPIN) {
+    public void setHashedPIN(String hashedPIN) {
+
+    }
+
+    @Override
+    public void setSalt(String salt) {
 
     }
 
