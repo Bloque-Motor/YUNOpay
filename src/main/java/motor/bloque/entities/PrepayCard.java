@@ -28,6 +28,7 @@ public class PrepayCard implements Card {
         this.salt = hashed.get("salt");
         this.balance = amount;
         this.movements = new ArrayList<>();
+        //TODO: Card number generator
     }
 
     @Override
