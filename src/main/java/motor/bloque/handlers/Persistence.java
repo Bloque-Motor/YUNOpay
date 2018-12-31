@@ -1,9 +1,8 @@
 package motor.bloque.handlers;
 
-//TODO: this class will handle file read and write operations
-
 import motor.bloque.entities.CardMovement;
 import motor.bloque.entities.PrepayCard;
+import motor.bloque.exceptions.NoSuchCard;
 import motor.bloque.interfaces.Card;
 import motor.bloque.interfaces.Movement;
 import org.json.JSONArray;
@@ -19,9 +18,18 @@ import java.util.*;
 
 public class Persistence {
 
-    private Map<Integer,Card> cards;
+    private static Map<Integer,Card> cards;
 
-    public Persistence(){
+    public static Card getCard(int cardNumber) throws NoSuchCard{
+        if(cards.containsKey(cardNumber)) return cards.get(cardNumber);
+        throw new NoSuchCard(cardNumber);
+    }
+
+    public static void putCard(Card card){
+        cards.put(card.getNumber(), card);
+    }
+
+    public static void loadPersistence(){
         String resourceName = "data.json";
         InputStream is = Persistence.class.getResourceAsStream(resourceName);
         if (is == null) {
@@ -37,7 +45,8 @@ public class Persistence {
                     Card card = new PrepayCard();
                     card.setName(cardJSON.getString("name"));
                     card.setNumber(cardJSON.getInt("number"));
-                    card.setHashedPIN(cardJSON.getString("hashedPIN").getBytes());
+                    card.setHashedPIN(cardJSON.getString("hashedPIN"));
+                    card.setSalt(cardJSON.getString("salt"));
                     card.setBalance(cardJSON.getInt("balance"));
 
                     List<Movement> movements = new ArrayList<>();
@@ -57,16 +66,17 @@ public class Persistence {
         }
     }
 
-    public boolean saveAll() {
+    public static boolean saveAll() {
         JSONObject data = new JSONObject();
-        Integer[] cardNumbers = (Integer[]) cards.keySet().toArray();
+        Integer[] cardNumbers = cards.keySet().toArray(new Integer[cards.keySet().size()]);
 
         for (Integer num : cardNumbers){
             Card card = cards.get(num);
             JSONObject cardDetails = new JSONObject();
             cardDetails.put("name", card.getName());
             cardDetails.put("number", card.getNumber());
-            cardDetails.put("hashedPIN", Hasher.bytesToHex(card.getHashedPIN()));
+            cardDetails.put("hashedPIN", card.getHashedPIN());
+            cardDetails.put("salt", card.getSalt());
             cardDetails.put("balance", card.getBalance());
 
             JSONArray movementJSON = new JSONArray();
@@ -94,7 +104,5 @@ public class Persistence {
             result = false;
         }
         return result;
-
-        
     }
 }

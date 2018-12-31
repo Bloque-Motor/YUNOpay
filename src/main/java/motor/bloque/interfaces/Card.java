@@ -6,7 +6,8 @@ public interface Card {
 
     String getName();
     int getNumber();
-    byte[] getHashedPIN();
+    String getHashedPIN();
+    String getSalt();
     int getBalance();
     List<Movement> getMovements();
 
@@ -15,7 +16,8 @@ public interface Card {
 
     void setName(String name);
     void setNumber(int number);
-    void setHashedPIN(byte[] hashedPIN);
+    void setHashedPIN(String hashedPIN);
+    void setSalt(String salt);
     void setBalance(int balance);
     void setMovements(List<Movement> movements);
 

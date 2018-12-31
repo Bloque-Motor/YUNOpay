@@ -16,10 +16,10 @@ public class YUNO {
     public static Persistence persistence;
 
     public static void main(String[] args){
-        persistence = new Persistence();
+        Persistence.loadPersistence();
 
         //Provisional
         Terminal.mainMenu();
-        persistence.saveAll();
+        Persistence.saveAll();
     }
 }
