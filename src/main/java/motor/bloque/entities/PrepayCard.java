@@ -1,83 +1,119 @@
 package motor.bloque.entities;
+import motor.bloque.exceptions.InsufficientFunds;
+import motor.bloque.exceptions.NoSuchCard;
+import motor.bloque.handlers.Credentials;
 import motor.bloque.interfaces.*;
-
-//TODO: class to hold all user and card data.
-
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PrepayCard implements Card {
 
-    public PrepayCard(){};
+    private String name;
+    private String cardNumber;
+    private String hashedPIN;
+    private String salt;
+    private int balance;
+    private List<Movement> movements;
 
-    @Override
+    public PrepayCard(){}
+
+    public PrepayCard(String name, String surname, String pin, int amount){
+        this.name = name + surname;
+        Map<Credentials.HASHED, String> hashed = Credentials.hashNewPassword(pin);
+        this.hashedPIN = hashed.get(Credentials.HASHED.PASSWORD);
+        this.salt = hashed.get(Credentials.HASHED.SALT);
+        this.balance = amount;
+        this.movements = new ArrayList<>();
+        this.cardNumber = Credentials.generateCardNumber();
+    }
+
     public String getName() {
-        return null;
+        return name;
+    }
+    
+    public String getNumber() {
+        return cardNumber;
     }
 
-    @Override
-    public int getNumber() {
-        return 0;
-    }
-
-    @Override
     public String getHashedPIN() {
-        return null;
+        return hashedPIN;
     }
 
-    @Override
     public String getSalt() {
-        return null;
+        return salt;
     }
 
-    @Override
     public int getBalance() {
-        return 0;
+        return balance;
     }
 
-    @Override
     public List<Movement> getMovements() {
-        return null;
+        return movements;
     }
 
-    @Override
-    public boolean changePIN(int oldPIN, int newPIN) {
-        return false;
+    public boolean changePIN(String oldPIN, String newPIN) {
+        try {
+            if(!Credentials.validatePassword(oldPIN, cardNumber)) return false;
+            Map<Credentials.HASHED, String> map = Credentials.hashNewPassword(newPIN);
+            this.setHashedPIN(map.get(Credentials.HASHED.PASSWORD));
+            this.setSalt(map.get(Credentials.HASHED.SALT));
+        }catch (NoSuchCard e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    @Override
-    public boolean recharge(int amount) {
-        return false;
+    public boolean recharge(int amount, String pin) {
+        try {
+            if(!Credentials.validatePassword(pin, cardNumber)) return false;
+            balance = balance + amount;
+        }catch (NoSuchCard e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    @Override
+    public boolean addMovement(String pin, Movement movement) throws  InsufficientFunds{
+        try {
+            if(!Credentials.validatePassword(pin, cardNumber)) return false;
+            int amount = movement.getAmount();
+            if((balance - amount) >= 0){
+                balance -= amount;
+                movements.add(movement);
+            }else{
+                throw new InsufficientFunds(amount - balance);
+            }
+        }catch (NoSuchCard e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     public void setName(String name) {
-
+        this.name = name;
     }
 
-    @Override
-    public void setNumber(int number) {
-
+    public void setNumber(String number) {
+        this.cardNumber = number;
     }
 
-    @Override
     public void setHashedPIN(String hashedPIN) {
-
+        this.hashedPIN = hashedPIN;
     }
 
-    @Override
     public void setSalt(String salt) {
-
+        this.salt = salt;
     }
-
-    @Override
+    
     public void setBalance(int balance) {
-
+        this.balance = balance;
     }
 
-    @Override
     public void setMovements(List<Movement> movements) {
-
+        this.movements = movements;
     }
-
-
 }

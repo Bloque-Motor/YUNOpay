@@ -8,28 +8,51 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-public class Hasher {
+public class Credentials {
 
     private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 
-    public static Map<String, String> hashNewPassword(String passwordToHash) throws NoSuchAlgorithmException
-    {
-        byte[] salt = getSalt();
-        String securePassword = getSecurePassword(passwordToHash, salt);
-        Map<String, String> map = new HashMap<>();
-        map.put("password", securePassword);
-        map.put("salt", bytesToHex(salt));
-        return map;
+    public enum HASHED{PASSWORD, SALT};
+
+    public static Map<HASHED, String> hashNewPassword(String passwordToHash){
+        try {
+            byte[] salt = getSalt();
+            String securePassword = getSecurePassword(passwordToHash, salt);
+            Map<HASHED, String> map = new HashMap<>();
+            map.put(HASHED.PASSWORD, securePassword);
+            map.put(HASHED.SALT, bytesToHex(salt));
+            return map;
+        }catch (NoSuchAlgorithmException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public static boolean validatePassword(String password, int cardNumber) throws NoSuchCard{
+    public static boolean validatePassword(String password, String cardNumber) throws NoSuchCard{
         Card card = Persistence.getCard(cardNumber);
         String salt = card.getSalt();
 
         String toValidate = getSecurePassword(password, salt.getBytes());
         if (toValidate != null) return toValidate.equals(card.getHashedPIN());
         return false;
+    }
+
+    public static String generateCardNumber(){
+        Random random = new Random();
+        int length = 12;
+        char[] digits = new char[length];
+        for (int i = 0; i < length; i++) {
+            digits[i] = (char) (random.nextInt(10) + '0');
+        }
+        String cardNumber = new String(digits);
+        try{
+            Persistence.getCard(cardNumber);
+        }catch (NoSuchCard e){
+            return cardNumber;
+        }
+        return generateCardNumber();
     }
 
     private static String bytesToHex(byte[] bytes) {
