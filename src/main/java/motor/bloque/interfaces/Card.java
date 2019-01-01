@@ -1,11 +1,13 @@
 package motor.bloque.interfaces;
 
+import motor.bloque.exceptions.InsufficientFunds;
+
 import java.util.List;
 
 public interface Card {
 
     String getName();
-    int getNumber();
+    String getNumber();
     String getHashedPIN();
     String getSalt();
     int getBalance();
@@ -13,10 +15,10 @@ public interface Card {
 
     boolean changePIN(String oldPIN, String newPIN);
     boolean recharge(int amount, String PIN);
-    boolean addMovement(String PIN, int amount);
+    boolean addMovement(String PIN, Movement movement) throws InsufficientFunds;
 
     void setName(String name);
-    void setNumber(int number);
+    void setNumber(String number);
     void setHashedPIN(String hashedPIN);
     void setSalt(String salt);
     void setBalance(int balance);

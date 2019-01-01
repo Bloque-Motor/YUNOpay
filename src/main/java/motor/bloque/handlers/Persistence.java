@@ -18,9 +18,9 @@ import java.util.*;
 
 public class Persistence {
 
-    private static Map<Integer,Card> cards;
+    private static Map<String,Card> cards;
 
-    public static Card getCard(int cardNumber) throws NoSuchCard{
+    public static Card getCard(String cardNumber) throws NoSuchCard{
         if(cards.containsKey(cardNumber)) return cards.get(cardNumber);
         throw new NoSuchCard(cardNumber);
     }
@@ -44,7 +44,7 @@ public class Persistence {
                     JSONObject cardJSON = (JSONObject) data.get(key);
                     Card card = new PrepayCard();
                     card.setName(cardJSON.getString("name"));
-                    card.setNumber(cardJSON.getInt("number"));
+                    card.setNumber(cardJSON.getString("number"));
                     card.setHashedPIN(cardJSON.getString("hashedPIN"));
                     card.setSalt(cardJSON.getString("salt"));
                     card.setBalance(cardJSON.getInt("balance"));
