@@ -44,12 +44,12 @@ class PrepayCardTest {
         assertEquals(0, testCard.getBalance());
     }
 
-    @Test
+   /* @Test
     @DisplayName("PrepayCard getBalance after recharge")
     void getBalance1() {
         testCard.recharge(10, "1234");
         assertEquals(10, testCard.getBalance());
-    }
+    }*/
 
     @Test
     void getMovements() {
