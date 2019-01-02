@@ -48,6 +48,7 @@ public class Persistence {
                     card.setHashedPIN(cardJSON.getString("hashedPIN"));
                     card.setSalt(cardJSON.getString("salt"));
                     card.setBalance(cardJSON.getInt("balance"));
+                    card.setExpirationDate(LocalDateTime.parse(cardJSON.getString("Expiration Date")));
 
                     List<Movement> movements = new ArrayList<>();
                     JSONArray movementsJSON = cardJSON.getJSONArray("movements");
@@ -78,6 +79,7 @@ public class Persistence {
             cardDetails.put("hashedPIN", card.getHashedPIN());
             cardDetails.put("salt", card.getSalt());
             cardDetails.put("balance", card.getBalance());
+            cardDetails.put("Expiration Date", card.getExpirationDate().toString());
 
             JSONArray movementJSON = new JSONArray();
             List<Movement> moves = card.getMovements();
