@@ -1,6 +1,7 @@
 package motor.bloque.interfaces;
 
 import motor.bloque.exceptions.InsufficientFunds;
+import motor.bloque.exceptions.NegativeAmount;
 
 import java.util.List;
 
@@ -14,8 +15,8 @@ public interface Card {
     List<Movement> getMovements();
 
     boolean changePIN(String oldPIN, String newPIN);
-    boolean recharge(int amount, String PIN);
-    boolean addMovement(String PIN, Movement movement) throws InsufficientFunds;
+    boolean recharge(int amount, String pin) throws NegativeAmount;
+    boolean addMovement(String pin, Movement movement) throws InsufficientFunds, NegativeAmount;
 
     void setName(String name);
     void setNumber(String number);

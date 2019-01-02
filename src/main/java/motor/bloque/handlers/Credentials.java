@@ -34,6 +34,7 @@ public class Credentials {
     public static boolean validatePassword(String password, String cardNumber) throws NoSuchCard{
         Card card = Persistence.getCard(cardNumber);
         String salt = card.getSalt();
+        salt = salt.toLowerCase();
 
         String toValidate = getSecurePassword(password, hexStringToByteArray(salt));
         if (toValidate != null) return toValidate.equals(card.getHashedPIN());

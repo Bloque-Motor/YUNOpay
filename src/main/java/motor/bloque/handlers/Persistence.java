@@ -18,7 +18,7 @@ import java.util.*;
 
 public class Persistence {
 
-    private static Map<String,Card> cards;
+    private static Map<String,Card> cards = new HashMap<>();
 
     public static Card getCard(String cardNumber) throws NoSuchCard{
         if(cards.containsKey(cardNumber)) return cards.get(cardNumber);
@@ -105,4 +105,9 @@ public class Persistence {
         }
         return result;
     }
+
+    private Persistence(){
+        throw new IllegalStateException("Utility class");
+    }
+
 }

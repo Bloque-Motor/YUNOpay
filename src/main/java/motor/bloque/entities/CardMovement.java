@@ -4,39 +4,46 @@ import motor.bloque.interfaces.Movement;
 
 import java.time.LocalDateTime;
 
-//TODO: this class is for logging movements for later retrieval.
-
 public class CardMovement implements Movement {
 
-    public CardMovement(){};
+    private int amount;
+    private int remainingBalance;
+    private LocalDateTime date;
+
+    public CardMovement(int amount){
+        this.amount = amount;
+        date = LocalDateTime.now();
+    }
+
+    public CardMovement(){}
 
     @Override
     public void setAmount(int amount) {
-
+        this.amount = amount;
     }
 
     @Override
     public void setRemainingBalance(int remainingBalance) {
-
+        this.remainingBalance = remainingBalance;
     }
 
     @Override
     public void setDate(LocalDateTime date) {
-
+        this.date = date;
     }
 
     @Override
     public int getAmount() {
-        return 0;
+        return amount;
     }
 
     @Override
     public int getRemainingBalance() {
-        return 0;
+        return remainingBalance;
     }
 
     @Override
     public LocalDateTime getDate() {
-        return null;
+        return date;
     }
 }
