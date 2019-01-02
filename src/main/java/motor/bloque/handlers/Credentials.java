@@ -3,6 +3,7 @@ package motor.bloque.handlers;
 import motor.bloque.exceptions.NoSuchCard;
 import motor.bloque.interfaces.Card;
 
+import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -34,6 +35,7 @@ public class Credentials {
     public static boolean validatePassword(String password, String cardNumber) throws NoSuchCard{
         Card card = Persistence.getCard(cardNumber);
         String salt = card.getSalt();
+        salt = salt.toLowerCase();
 
         String toValidate = getSecurePassword(password, hexStringToByteArray(salt));
         if (toValidate != null) return toValidate.equals(card.getHashedPIN());
@@ -56,13 +58,14 @@ public class Credentials {
     }
 
     private static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
+        return DatatypeConverter.printHexBinary(bytes);
+        /*char[] hexChars = new char[bytes.length * 2];
         for ( int j = 0; j < bytes.length; j++ ) {
             int v = bytes[j] & 0xFF;
             hexChars[j * 2] = hexArray[v >>> 4];
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
         }
-        return new String(hexChars);
+        return new String(hexChars);*/
     }
 
     private static byte[] hexStringToByteArray(String s) {
