@@ -20,7 +20,10 @@ public class PrepayCard implements Card {
     private List<Movement> movements;
     private LocalDateTime expirationDate;
 
-    public PrepayCard(){}
+    public PrepayCard(){
+
+       this.movements = new ArrayList<>();
+    }
 
     public PrepayCard(String name, String surname, String pin, int amount){
         this.name = name + surname;
