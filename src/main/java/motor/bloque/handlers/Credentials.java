@@ -6,21 +6,22 @@ import motor.bloque.interfaces.Card;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
 
 public class Credentials {
 
     private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
+    private static Random random = new Random();
 
-    public enum HASHED{PASSWORD, SALT};
+    public enum HASHED{PASSWORD, SALT}
 
     public static Map<HASHED, String> hashNewPassword(String passwordToHash){
         try {
             byte[] salt = getSalt();
             String securePassword = getSecurePassword(passwordToHash, salt);
-            Map<HASHED, String> map = new HashMap<>();
+            Map<HASHED, String> map = new EnumMap(HASHED.class);
             map.put(HASHED.PASSWORD, securePassword);
             map.put(HASHED.SALT, bytesToHex(salt));
             return map;
@@ -34,13 +35,12 @@ public class Credentials {
         Card card = Persistence.getCard(cardNumber);
         String salt = card.getSalt();
 
-        String toValidate = getSecurePassword(password, salt.getBytes());
+        String toValidate = getSecurePassword(password, hexStringToByteArray(salt));
         if (toValidate != null) return toValidate.equals(card.getHashedPIN());
         return false;
     }
 
     public static String generateCardNumber(){
-        Random random = new Random();
         int length = 12;
         char[] digits = new char[length];
         for (int i = 0; i < length; i++) {
@@ -63,6 +63,16 @@ public class Credentials {
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
         }
         return new String(hexChars);
+    }
+
+    private static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
     }
 
     private static String getSecurePassword(String passwordToHash, byte[] salt)
