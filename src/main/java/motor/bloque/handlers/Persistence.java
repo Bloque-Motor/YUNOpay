@@ -50,17 +50,6 @@ public class Persistence {
                     card.setBalance(cardJSON.getInt("balance"));
                     card.setExpirationDate(LocalDateTime.parse(cardJSON.getString("Expiration Date")));
 
-                    List<Movement> movements = new ArrayList<>();
-                    JSONArray movementsJSON = cardJSON.getJSONArray("movements");
-                    for (int i = 0; i < movementsJSON.length(); i++){
-                        JSONObject moveJSON = (JSONObject) movementsJSON.get(i);
-                        Movement move = new CardMovement();
-                        move.setAmount(moveJSON.getInt("amount"));
-                        move.setDate(LocalDateTime.parse(moveJSON.getString("date")));
-                        move.setRemainingBalance(moveJSON.getInt("remainingBalance"));
-                        movements.add(move);
-                    }
-                    card.setMovements(movements);
                     cards.put(card.getNumber(), card);
                 }
             }
@@ -81,17 +70,6 @@ public class Persistence {
             cardDetails.put("balance", card.getBalance());
             cardDetails.put("Expiration Date", card.getExpirationDate().toString());
 
-            JSONArray movementJSON = new JSONArray();
-            List<Movement> moves = card.getMovements();
-
-            for (Movement move : moves){
-                JSONObject moveJSON = new JSONObject();
-                moveJSON.put("amount", move.getAmount());
-                moveJSON.put("remainingBalance", move.getRemainingBalance());
-                moveJSON.put("date", move.getDate().toString());
-                movementJSON.put(moveJSON);
-            }
-            cardDetails.put("movements", movementJSON);
             data.put(num.toString(), cardDetails);
         }
 
