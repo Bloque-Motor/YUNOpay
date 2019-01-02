@@ -3,7 +3,6 @@ package motor.bloque.handlers;
 import motor.bloque.exceptions.NoSuchCard;
 import motor.bloque.interfaces.Card;
 
-import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -58,14 +57,13 @@ public class Credentials {
     }
 
     private static String bytesToHex(byte[] bytes) {
-        return DatatypeConverter.printHexBinary(bytes);
-        /*char[] hexChars = new char[bytes.length * 2];
+        char[] hexChars = new char[bytes.length * 2];
         for ( int j = 0; j < bytes.length; j++ ) {
             int v = bytes[j] & 0xFF;
             hexChars[j * 2] = hexArray[v >>> 4];
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
         }
-        return new String(hexChars);*/
+        return new String(hexChars);
     }
 
     private static byte[] hexStringToByteArray(String s) {

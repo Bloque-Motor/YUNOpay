@@ -105,4 +105,9 @@ public class Persistence {
         }
         return result;
     }
+
+    private Persistence(){
+        throw new IllegalStateException("Utility class");
+    }
+
 }
