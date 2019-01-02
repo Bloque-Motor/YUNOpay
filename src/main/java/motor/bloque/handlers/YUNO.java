@@ -9,10 +9,6 @@ public class YUNO {
 
     public static void main(String[] args){
         Persistence.loadPersistence();
-
-        //Provisional
-        //Terminal.mainMenu();
         ClientView.startClientApp();
-        Persistence.saveAll();
     }
 }
