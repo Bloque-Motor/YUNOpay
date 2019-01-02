@@ -4,6 +4,8 @@ import motor.bloque.exceptions.NegativeAmount;
 import motor.bloque.exceptions.NoSuchCard;
 import motor.bloque.handlers.Credentials;
 import motor.bloque.interfaces.*;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ public class PrepayCard implements Card {
     private String salt;
     private int balance;
     private List<Movement> movements;
+    private LocalDateTime expirationDate;
 
     public PrepayCard(){}
 
@@ -27,6 +30,7 @@ public class PrepayCard implements Card {
         this.balance = amount;
         this.movements = new ArrayList<>();
         this.cardNumber = Credentials.generateCardNumber();
+        this.expirationDate = LocalDateTime.now().plusYears(1);
     }
 
     public String getName() {
@@ -51,6 +55,11 @@ public class PrepayCard implements Card {
 
     public List<Movement> getMovements() {
         return movements;
+    }
+
+    public LocalDateTime getExpirationDate(){
+
+        return expirationDate;
     }
 
     public boolean changePIN(String oldPIN, String newPIN) {
@@ -120,4 +129,6 @@ public class PrepayCard implements Card {
     public void setMovements(List<Movement> movements) {
         this.movements = movements;
     }
+
+    public void setExpirationDate(LocalDateTime expirationDate){ this.expirationDate = expirationDate; }
 }
