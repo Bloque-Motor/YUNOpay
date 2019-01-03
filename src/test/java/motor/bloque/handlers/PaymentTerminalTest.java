@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
    @Test
+   @DisplayName("2 valid movements")
            void test1() throws NoSuchCard ,NegativeAmount, InsufficientFunds{
        PaymentTerminal pay = new PaymentTerminal();
        PrepayCard tarjeta = new PrepayCard("Nombre1", "Apellido1", "1234", 700);
@@ -31,11 +32,13 @@ import static org.junit.jupiter.api.Assertions.*;
        assertEquals(true, resultado2);
    }
      @Test
+     @DisplayName("NoSuchCard test")
      void test2() throws NoSuchCard ,NegativeAmount, InsufficientFunds{
          PaymentTerminal pay = new PaymentTerminal();
          assertThrows(NoSuchCard.class, () -> pay.makeMovement("1000",0,"123"));
      }
      @Test
+     @DisplayName("InsufficientFunds test")
      void test3() throws NoSuchCard ,NegativeAmount, InsufficientFunds{
          PaymentTerminal pay = new PaymentTerminal();
          PrepayCard tarjeta = new PrepayCard("Nombre1", "Apellido1", "1234", 700);
@@ -43,6 +46,7 @@ import static org.junit.jupiter.api.Assertions.*;
          assertThrows(InsufficientFunds.class, () -> pay.makeMovement(tarjeta.getNumber(),2000,"1234"));
      }
      @Test
+     @DisplayName("NegativeAmount test")
      void test4() throws NoSuchCard ,NegativeAmount, InsufficientFunds{
          PaymentTerminal pay = new PaymentTerminal();
          PrepayCard tarjeta = new PrepayCard("Nombre1", "Apellido1", "1234", 700);
@@ -50,6 +54,7 @@ import static org.junit.jupiter.api.Assertions.*;
          assertThrows(NegativeAmount.class, () -> pay.makeMovement(tarjeta.getNumber(),-2000,"1234"));
      }
      @Test
+     @DisplayName("Wrong pin")
      void test5()  throws NoSuchCard ,NegativeAmount, InsufficientFunds{
          PaymentTerminal pay = new PaymentTerminal();
          PrepayCard tarjeta = new PrepayCard("Nombre1", "Apellido1", "1234", 700);
