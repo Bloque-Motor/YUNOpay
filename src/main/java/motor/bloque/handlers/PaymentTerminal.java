@@ -10,12 +10,9 @@ import motor.bloque.interfaces.Movement;
 
 
 public class PaymentTerminal {
-    private static Card cardAux;
-    private static Movement movementAux;
-
     public static boolean makeMovement (String cardNumber,int amount,String pin) throws NoSuchCard ,NegativeAmount, InsufficientFunds {
-             cardAux = Persistence.getCard(cardNumber);
-             movementAux = new CardMovement(amount);
+        Card cardAux = Persistence.getCard(cardNumber);
+        Movement movementAux = new CardMovement(amount);
              boolean res = cardAux.addMovement(pin, movementAux);
 
     return  res;
