@@ -29,6 +29,7 @@
 
     <properties>
         <sonar.login>67f279ab2accb9f55e3d90f07513f4ac06fa8542</sonar.login>
+        <sonar.login>a839171d0dc6e7bbdb1597cb501a5481e516dc07</sonar.login>
         <sonar.host.url>http://costa.ls.fi.upm.es:9000/sonar</sonar.host.url>
         <sonar.projectName>${groupId}:${artifactId}</sonar.projectName>
         <sonar.projectKey>${groupId}:${artifactId}:${sonar.login}</sonar.projectKey>
@@ -95,7 +96,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.21.0</version>
+                <version>2.22.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.platform</groupId>
@@ -103,6 +104,9 @@
                         <version>${junit.platform.version}</version>
                     </dependency>
                 </dependencies>
+                <configuration>
+                    <useSystemClassLoader> false </useSystemClassLoader>
+                </configuration>
             </plugin>
         </plugins>
     </build>
