@@ -1,6 +1,6 @@
 package motor.bloque.handlers;
 
-//TODO: This class will handle payments
+
 import motor.bloque.entities.CardMovement;
 import motor.bloque.exceptions.InsufficientFunds;
 import motor.bloque.exceptions.NegativeAmount;
@@ -14,8 +14,8 @@ public class PaymentTerminal {
     private static Movement movementAux;
 
     public static boolean makeMovement (String cardNumber,int amount,String pin) throws NoSuchCard ,NegativeAmount, InsufficientFunds {
-            cardAux = Persistence.getCard(cardNumber);
-            movementAux = new CardMovement(amount);
+             cardAux = Persistence.getCard(cardNumber);
+             movementAux = new CardMovement(amount);
              boolean res = cardAux.addMovement(pin, movementAux);
 
     return  res;
