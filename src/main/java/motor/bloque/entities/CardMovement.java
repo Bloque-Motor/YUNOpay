@@ -4,6 +4,7 @@ import motor.bloque.interfaces.Movement;
 
 import java.time.LocalDateTime;
 
+
 public class CardMovement implements Movement {
 
     private int amount;
