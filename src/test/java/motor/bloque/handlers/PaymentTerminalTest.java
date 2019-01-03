@@ -1,5 +1,6 @@
-package motor.bloque.entities;
+package motor.bloque.handlers;
 
+import motor.bloque.entities.PrepayCard;
 import motor.bloque.exceptions.NoSuchCard;
 import motor.bloque.exceptions.NegativeAmount;
 import motor.bloque.exceptions.InsufficientFunds;
