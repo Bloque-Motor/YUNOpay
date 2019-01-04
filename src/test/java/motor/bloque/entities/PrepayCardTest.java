@@ -1,5 +1,6 @@
 package motor.bloque.entities;
 
+import motor.bloque.exceptions.CardExpired;
 import motor.bloque.exceptions.InsufficientFunds;
 import motor.bloque.exceptions.NegativeAmount;
 import motor.bloque.handlers.Persistence;
@@ -46,21 +47,21 @@ class PrepayCardTest {
 
     @Test
     @DisplayName("PrepayCard getBalance after recharge")
-    void getBalance1() throws NegativeAmount {
+    void getBalance1() throws NegativeAmount, CardExpired {
         testCard.recharge(10, "1234");
         assertEquals(10, testCard.getBalance());
     }
 
     @Test
     @DisplayName("PrepayCard recharge with wrong pin")
-    void getBalance2() throws NegativeAmount {
+    void getBalance2() throws NegativeAmount, CardExpired {
         assertFalse(testCard.recharge(10, "123"));
         assertEquals(0, testCard.getBalance());
     }
 
     @Test
     @DisplayName("PrepayCard getMovements")
-    void getMovements() throws InsufficientFunds, NegativeAmount {
+    void getMovements() throws InsufficientFunds, NegativeAmount, CardExpired {
         Movement movement = new CardMovement();
         movement.setAmount(10);
         testCard.setBalance(20);
@@ -73,7 +74,7 @@ class PrepayCardTest {
 
     @Test
     @DisplayName("PrepayCard change pin")
-    void changePIN() throws NegativeAmount {
+    void changePIN() throws NegativeAmount, CardExpired {
         assertTrue(testCard.changePIN("1234", "4321"));
         assertTrue(testCard.recharge(10, "4321"));
         assertEquals(10, testCard.getBalance());
@@ -88,7 +89,7 @@ class PrepayCardTest {
 
     @Test
     @DisplayName("PrepayCard recharge positive amount")
-    void recharge() throws NegativeAmount {
+    void recharge() throws NegativeAmount, CardExpired {
         assertTrue(testCard.recharge(25, "1234"));
         assertEquals(25, testCard.getBalance());
     }
@@ -101,20 +102,27 @@ class PrepayCardTest {
 
     @Test
     @DisplayName("PrepayCard recharge invalid card")
-    void recharge3() throws NegativeAmount {
+    void recharge3() throws NegativeAmount, CardExpired {
         assertFalse(emptyCard.recharge(10, "1111"));
     }
 
     @Test
     @DisplayName("PrepayCard recharge wrong pin number")
-    void recharge4() throws NegativeAmount {
+    void recharge4() throws NegativeAmount, CardExpired {
         assertFalse(testCard.recharge(25, "123"));
         assertEquals(0, testCard.getBalance());
     }
 
     @Test
+    @DisplayName("PrepayCard recharge after expiration date")
+    void recharge5() {
+        testCard.setExpirationDate(LocalDateTime.now().minusYears(1));
+        assertThrows(CardExpired.class, () -> testCard.recharge(10, "1234"));
+    }
+
+    @Test
     @DisplayName("PrepayCard addMovement")
-    void addMovement() throws InsufficientFunds, NegativeAmount {
+    void addMovement() throws InsufficientFunds, NegativeAmount, CardExpired {
         Movement movement = new CardMovement();
         movement.setAmount(10);
         testCard.setBalance(50);
@@ -133,7 +141,7 @@ class PrepayCardTest {
 
     @Test
     @DisplayName("PrepayCard addMovement invalid card")
-    void addMovement1() throws InsufficientFunds, NegativeAmount {
+    void addMovement1() throws InsufficientFunds, NegativeAmount, CardExpired {
         Movement movement = new CardMovement();
         movement.setAmount(5);
         assertFalse(emptyCard.addMovement("1111", movement));
@@ -145,6 +153,16 @@ class PrepayCardTest {
         Movement movement = new CardMovement();
         movement.setAmount(-10);
         assertThrows(NegativeAmount.class, () -> testCard.addMovement("1234", movement));
+    }
+
+    @Test
+    @DisplayName("PrepayCard addMovement after expiration date")
+    void addMovement3() {
+        testCard.setExpirationDate(LocalDateTime.now().minusYears(1));
+        testCard.setBalance(20);
+        Movement movement = new CardMovement();
+        movement.setAmount(10);
+        assertThrows(CardExpired.class, () -> testCard.addMovement("1234", movement));
     }
 
     @Test
@@ -185,4 +203,5 @@ class PrepayCardTest {
         testCard.setExpirationDate(dateTime);
         assertEquals(dateTime, testCard.getExpirationDate());
     }
+
 }

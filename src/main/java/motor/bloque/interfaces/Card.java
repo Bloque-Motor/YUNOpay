@@ -1,5 +1,6 @@
 package motor.bloque.interfaces;
 
+import motor.bloque.exceptions.CardExpired;
 import motor.bloque.exceptions.InsufficientFunds;
 import motor.bloque.exceptions.NegativeAmount;
 
@@ -17,8 +18,8 @@ public interface Card {
     LocalDateTime getExpirationDate();
 
     boolean changePIN(String oldPIN, String newPIN);
-    boolean recharge(int amount, String pin) throws NegativeAmount;
-    boolean addMovement(String pin, Movement movement) throws InsufficientFunds, NegativeAmount;
+    boolean recharge(int amount, String pin) throws NegativeAmount, CardExpired;
+    boolean addMovement(String pin, Movement movement) throws InsufficientFunds, NegativeAmount, CardExpired;
 
     void setName(String name);
     void setNumber(String number);
