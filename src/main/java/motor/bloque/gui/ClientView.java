@@ -3,34 +3,33 @@ package motor.bloque.gui;
 import motor.bloque.handlers.ClientController;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import static javax.swing.GroupLayout.Alignment.*;
 
 public class ClientView extends JFrame {
 
     private JPanel currentPanel;
-
+    private static final String CARDNUM = "Card number:";
+    private static final String PINSTRING = "PIN:";
     public enum panels {MAIN, NEWCARD, PAY, RECHARGE, CHANGEPIN, CHECKBALANCE, CHECKMOVES}
 
+
     public ClientView() {
-        MainMenu();
+        mainMenu();
     }
 
-    private void MainMenu() {
+    private void mainMenu() {
 
         JButton newCardButton = new JButton("New card");
         newCardButton.setToolTipText("Create a new card to use in the system");
         newCardButton.addActionListener(new ClientController.NewCardButton());
 
-        JButton payButton = new JButton("Pay");
+        JButton payButton = new JButton("pay");
         payButton.setToolTipText("Makes a payment with a card, provided there are sufficient funds in it");
         payButton.addActionListener(new ClientController.PayButton());
 
-        JButton rechargeMoneyButton = new JButton("Recharge money");
-        rechargeMoneyButton.setToolTipText("Recharge the card's balance with more money");
+        JButton rechargeMoneyButton = new JButton("recharge money");
+        rechargeMoneyButton.setToolTipText("recharge the card's balance with more money");
         rechargeMoneyButton.addActionListener(new ClientController.RechargeMoneyButton());
 
         JButton changePinButton = new JButton("Change PIN");
@@ -49,9 +48,7 @@ public class ClientView extends JFrame {
         quitButton.setToolTipText("Quit program");
         quitButton.addActionListener(new ClientController.QuitButton());
 
-
-
-        setTitle("YUNO Pay");
+        setTitle("YUNO pay");
         setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -101,13 +98,13 @@ public class ClientView extends JFrame {
 
     }
 
-    private void NewCard() {
+    private void newCard() {
         this.currentPanel = (JPanel) getContentPane();
         GroupLayout gl = new GroupLayout(currentPanel);
         currentPanel.setLayout(gl);
         JLabel nameLabel = new JLabel("Name:");
         JLabel surnameLabel = new JLabel("Surname:");
-        JLabel pinLabel = new JLabel("PIN:");
+        JLabel pinLabel = new JLabel(PINSTRING);
         JLabel confirmpinLabel = new JLabel("Confirm PIN:");
         JLabel amountLabel = new JLabel("Initial amount:");
 
@@ -116,6 +113,8 @@ public class ClientView extends JFrame {
         JPasswordField field3 = new JPasswordField(4);
         JPasswordField field4 = new JPasswordField(4);
         JTextField field5 = new JTextField(10);
+
+        setTitle("New card");
 
         gl.setAutoCreateGaps(true);
         gl.setAutoCreateContainerGaps(true);
@@ -157,18 +156,106 @@ public class ClientView extends JFrame {
         
     }
 
-    private void Pay() {
-        this.currentPanel = (JPanel) getContentPane();;
+    private void pay() {
+        this.currentPanel = (JPanel) getContentPane();
         GroupLayout gl = new GroupLayout(currentPanel);
         currentPanel.setLayout(gl);
-        JLabel cardNumberLabel = new JLabel("Card number:");
-        JLabel pinLabel = new JLabel("PIN:");
-        JLabel amountLabel = new JLabel("Amount:");
+
+        JLabel cardNumberLabel = new JLabel(CARDNUM);
+        JLabel pinLabel = new JLabel(PINSTRING);
+        JLabel amountLabel = new JLabel("Amount to pay:");
 
         JTextField cardNumberField = new JTextField(10);
         JPasswordField pinField = new JPasswordField(4);
         JTextField amountField = new JTextField(10);
 
+        setTitle("pay");
+
+        makeCardPinAmountPanel(gl, cardNumberLabel, pinLabel, amountLabel, cardNumberField, pinField, amountField);
+
+    }
+
+    private void recharge() {
+        this.currentPanel = (JPanel) getContentPane();
+        GroupLayout gl = new GroupLayout(currentPanel);
+        currentPanel.setLayout(gl);
+
+        JLabel cardNumberLabel = new JLabel(CARDNUM);
+        JLabel pinLabel = new JLabel(PINSTRING);
+        JLabel amountLabel = new JLabel("Amount to recharge:");
+
+        JTextField cardNumberField = new JTextField(10);
+        JPasswordField pinField = new JPasswordField(4);
+        JTextField amountField = new JTextField(10);
+
+        setTitle("recharge card");
+
+        makeCardPinAmountPanel(gl, cardNumberLabel, pinLabel, amountLabel, cardNumberField, pinField, amountField);
+    }
+
+    private void changePin() {
+        this.currentPanel = (JPanel) getContentPane();
+        GroupLayout gl = new GroupLayout(currentPanel);
+        currentPanel.setLayout(gl);
+
+        JLabel cardNumberLabel = new JLabel(CARDNUM);
+        JLabel oldPinLabel = new JLabel("Old PIN:");
+        JLabel newPinLabel = new JLabel("New PIN:");
+        JLabel confirmPinLabel = new JLabel("Confirm new PIN:");
+
+        JTextField cardNumberField = new JTextField(10);
+        JPasswordField oldPinField = new JPasswordField(4);
+        JPasswordField newPinField = new JPasswordField(4);
+        JPasswordField confirmPinField = new JPasswordField(4);
+
+        gl.setAutoCreateGaps(true);
+        gl.setAutoCreateContainerGaps(true);
+
+        gl.setHorizontalGroup(gl.createSequentialGroup()
+                .addGroup(gl.createParallelGroup(TRAILING)
+                        .addComponent(cardNumberLabel)
+                        .addComponent(oldPinLabel)
+                        .addComponent(newPinLabel)
+                        .addComponent(confirmPinLabel))
+                .addGroup(gl.createParallelGroup()
+                        .addComponent(cardNumberField)
+                        .addComponent(oldPinField)
+                        .addComponent(newPinField)
+                        .addComponent(confirmPinField))
+        );
+
+        gl.setVerticalGroup(gl.createSequentialGroup()
+                .addGroup(gl.createParallelGroup(BASELINE)
+                        .addComponent(cardNumberLabel)
+                        .addComponent(cardNumberField))
+                .addGroup(gl.createParallelGroup(BASELINE)
+                        .addComponent(oldPinLabel)
+                        .addComponent(oldPinField))
+                .addGroup(gl.createParallelGroup(BASELINE)
+                        .addComponent(newPinLabel)
+                        .addComponent(newPinField))
+                .addGroup(gl.createParallelGroup(BASELINE)
+                        .addComponent(confirmPinLabel)
+                        .addComponent(confirmPinField))
+        );
+
+        pack();
+
+    }
+
+    private void checkBalance(){
+        this.currentPanel = (JPanel) getContentPane();
+        GroupLayout gl = new GroupLayout(currentPanel);
+        currentPanel.setLayout(gl);
+    }
+
+    private void checkMovements(){
+        this.currentPanel = (JPanel) getContentPane();
+        GroupLayout gl = new GroupLayout(currentPanel);
+        currentPanel.setLayout(gl);
+    }
+
+    private void makeCardPinAmountPanel(GroupLayout gl, JLabel cardNumberLabel, JLabel pinLabel, JLabel amountLabel, JTextField cardNumberField, JPasswordField pinField, JTextField amountField) {
         gl.setAutoCreateGaps(true);
         gl.setAutoCreateContainerGaps(true);
 
@@ -196,57 +283,32 @@ public class ClientView extends JFrame {
         );
 
         pack();
-
-    }
-
-    private void Recharge() {
-        this.currentPanel = (JPanel) getContentPane();;
-        GroupLayout gl = new GroupLayout(currentPanel);
-        currentPanel.setLayout(gl);
-    }
-
-    private void ChangePin() {
-        this.currentPanel = (JPanel) getContentPane();;
-        GroupLayout gl = new GroupLayout(currentPanel);
-        currentPanel.setLayout(gl);
-    }
-
-    private void CheckBalance(){
-        this.currentPanel = (JPanel) getContentPane();;
-        GroupLayout gl = new GroupLayout(currentPanel);
-        currentPanel.setLayout(gl);
-    }
-
-    private void CheckMovements(){
-        this.currentPanel = (JPanel) getContentPane();;
-        GroupLayout gl = new GroupLayout(currentPanel);
-        currentPanel.setLayout(gl);
     }
 
     public void changePanel(panels panels) {
         getContentPane().removeAll();
         switch (panels){
-            case MAIN:
-            default:
-                MainMenu();
-                break;
             case NEWCARD:
-                NewCard();
+                newCard();
                 break;
             case PAY:
-                Pay();
+                pay();
                 break;
             case RECHARGE:
-                Recharge();
+                recharge();
                 break;
             case CHANGEPIN:
-                ChangePin();
+                changePin();
                 break;
             case CHECKBALANCE:
-                CheckBalance();
+                checkBalance();
                 break;
             case CHECKMOVES:
-                CheckMovements();
+                checkMovements();
+                break;
+            case MAIN:
+            default:
+                mainMenu();
                 break;
         }
 

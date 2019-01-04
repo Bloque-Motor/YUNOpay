@@ -59,6 +59,7 @@ public abstract class ClientController extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("Recharge money button pressed");
+            EventQueue.invokeLater(() ->clientView.changePanel(ClientView.panels.RECHARGE));
         }
     }
 
@@ -66,6 +67,7 @@ public abstract class ClientController extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("Change PIN button pressed");
+            EventQueue.invokeLater(() ->clientView.changePanel(ClientView.panels.CHANGEPIN));
         }
     }
 
@@ -73,6 +75,7 @@ public abstract class ClientController extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("Consult balance button pressed");
+            EventQueue.invokeLater(() ->clientView.changePanel(ClientView.panels.CHECKBALANCE));
         }
     }
 
@@ -80,6 +83,7 @@ public abstract class ClientController extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("Consult movements button pressed");
+            EventQueue.invokeLater(() ->clientView.changePanel(ClientView.panels.CHECKMOVES));
         }
     }
 
