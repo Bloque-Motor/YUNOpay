@@ -5,10 +5,18 @@ import motor.bloque.controllers.MainMenuController;
 import javax.swing.*;
 
 import static javax.swing.GroupLayout.Alignment.*;
+import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
 
 public class ClientView extends JFrame {
 
     private JPanel currentPanel;
+    private JTextField nameField;
+    private JTextField surnameField;
+    private JTextField cardNumberField;
+    private JPasswordField pinField;
+    private JPasswordField newPinField;
+    private JPasswordField confirmPinField;
+    private JTextField amountField;
     private static final String CARDNUM = "Card number:";
     private static final String PINSTRING = "PIN:";
     public enum panels {MAIN, NEWCARD, PAY, RECHARGE, CHANGEPIN, CHECKBALANCE, CHECKMOVES}
@@ -102,17 +110,26 @@ public class ClientView extends JFrame {
         this.currentPanel = (JPanel) getContentPane();
         GroupLayout gl = new GroupLayout(currentPanel);
         currentPanel.setLayout(gl);
+
         JLabel nameLabel = new JLabel("Name:");
         JLabel surnameLabel = new JLabel("Surname:");
         JLabel pinLabel = new JLabel(PINSTRING);
         JLabel confirmpinLabel = new JLabel("Confirm PIN:");
         JLabel amountLabel = new JLabel("Initial amount:");
 
-        JTextField field1 = new JTextField(10);
-        JTextField field2 = new JTextField(10);
-        JPasswordField field3 = new JPasswordField(4);
-        JPasswordField field4 = new JPasswordField(4);
-        JTextField field5 = new JTextField(10);
+         nameField = new JTextField(10);
+         surnameField = new JTextField(10);
+         pinField = new JPasswordField(4);
+         confirmPinField = new JPasswordField(4);
+         amountField = new JTextField(10);
+
+        JButton okButton = new JButton("OK");
+        okButton.setToolTipText("Validate data");
+        okButton.addActionListener(new NewCardController.okButton());
+
+        JButton closeButton = new JButton("Cancel");
+        closeButton.setToolTipText("Cancel current operation and return to main menu");
+        closeButton.addActionListener(new NewCardController.cancelButton());
 
         setTitle("New card");
 
@@ -127,30 +144,41 @@ public class ClientView extends JFrame {
                         .addComponent(confirmpinLabel)
                         .addComponent(amountLabel))
                 .addGroup(gl.createParallelGroup()
-                        .addComponent(field1)
-                        .addComponent(field2)
-                        .addComponent(field3)
-                        .addComponent(field4)
-                        .addComponent(field5))
+                        .addComponent(nameField)
+                        .addComponent(surnameField)
+                        .addComponent(pinField)
+                        .addComponent(confirmPinField)
+                        .addComponent(amountField))
+                .addPreferredGap(RELATED, GroupLayout.DEFAULT_SIZE,
+                        Short.MAX_VALUE)
+                        .addComponent(okButton)
+                        .addComponent(closeButton)
         );
 
         gl.setVerticalGroup(gl.createSequentialGroup()
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(nameLabel)
-                        .addComponent(field1))
+                        .addComponent(nameField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(surnameLabel)
-                        .addComponent(field2))
+                        .addComponent(surnameField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(pinLabel)
-                        .addComponent(field3))
+                        .addComponent(pinField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(confirmpinLabel)
-                        .addComponent(field4))
+                        .addComponent(confirmPinField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(amountLabel)
-                        .addComponent(field5))
+                        .addComponent(amountField))
+                .addPreferredGap(RELATED,
+                        GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(gl.createParallelGroup()
+                        .addComponent(okButton)
+                        .addComponent(closeButton))
         );
+
+        gl.linkSize(SwingConstants.HORIZONTAL, okButton, closeButton);
 
         pack();
         
@@ -165,9 +193,9 @@ public class ClientView extends JFrame {
         JLabel pinLabel = new JLabel(PINSTRING);
         JLabel amountLabel = new JLabel("Amount to pay:");
 
-        JTextField cardNumberField = new JTextField(10);
-        JPasswordField pinField = new JPasswordField(4);
-        JTextField amountField = new JTextField(10);
+        cardNumberField = new JTextField(10);
+        pinField = new JPasswordField(4);
+        amountField = new JTextField(10);
 
         setTitle("pay");
 
@@ -184,9 +212,9 @@ public class ClientView extends JFrame {
         JLabel pinLabel = new JLabel(PINSTRING);
         JLabel amountLabel = new JLabel("Amount to recharge:");
 
-        JTextField cardNumberField = new JTextField(10);
-        JPasswordField pinField = new JPasswordField(4);
-        JTextField amountField = new JTextField(10);
+        cardNumberField = new JTextField(10);
+        pinField = new JPasswordField(4);
+        amountField = new JTextField(10);
 
         setTitle("Recharge card");
 
@@ -203,10 +231,10 @@ public class ClientView extends JFrame {
         JLabel newPinLabel = new JLabel("New PIN:");
         JLabel confirmPinLabel = new JLabel("Confirm new PIN:");
 
-        JTextField cardNumberField = new JTextField(10);
-        JPasswordField oldPinField = new JPasswordField(4);
-        JPasswordField newPinField = new JPasswordField(4);
-        JPasswordField confirmPinField = new JPasswordField(4);
+        cardNumberField = new JTextField(10);
+        pinField = new JPasswordField(4);
+        newPinField = new JPasswordField(4);
+        confirmPinField = new JPasswordField(4);
 
         gl.setAutoCreateGaps(true);
         gl.setAutoCreateContainerGaps(true);
@@ -219,7 +247,7 @@ public class ClientView extends JFrame {
                         .addComponent(confirmPinLabel))
                 .addGroup(gl.createParallelGroup()
                         .addComponent(cardNumberField)
-                        .addComponent(oldPinField)
+                        .addComponent(pinField)
                         .addComponent(newPinField)
                         .addComponent(confirmPinField))
         );
@@ -230,7 +258,7 @@ public class ClientView extends JFrame {
                         .addComponent(cardNumberField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(oldPinLabel)
-                        .addComponent(oldPinField))
+                        .addComponent(pinField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(newPinLabel)
                         .addComponent(newPinField))
@@ -251,8 +279,8 @@ public class ClientView extends JFrame {
         JLabel cardNumberLabel = new JLabel(CARDNUM);
         JLabel pinLabel = new JLabel(PINSTRING);
 
-        JTextField cardNumberField = new JTextField(10);
-        JPasswordField pinField = new JPasswordField(4);
+        cardNumberField = new JTextField(10);
+        pinField = new JPasswordField(4);
 
         setTitle("Consult card balance");
 
@@ -267,8 +295,8 @@ public class ClientView extends JFrame {
         JLabel cardNumberLabel = new JLabel(CARDNUM);
         JLabel pinLabel = new JLabel(PINSTRING);
 
-        JTextField cardNumberField = new JTextField(10);
-        JPasswordField pinField = new JPasswordField(4);
+        cardNumberField = new JTextField(10);
+        pinField = new JPasswordField(4);
 
         setTitle("Consult card movements");
 
@@ -328,6 +356,34 @@ public class ClientView extends JFrame {
         );
 
         pack();
+    }
+
+    public JTextField getNameField(){
+        return nameField;
+    }
+
+    public JPasswordField getConfirmPinField() {
+        return confirmPinField;
+    }
+
+    public JPasswordField getNewPinField() {
+        return newPinField;
+    }
+
+    public JPasswordField getPinField() {
+        return pinField;
+    }
+
+    public JTextField getCardNumberField() {
+        return cardNumberField;
+    }
+
+    public JTextField getSurnameField() {
+        return surnameField;
+    }
+
+    public JTextField getAmountField() {
+        return amountField;
     }
 
     public void changePanel(panels panels) {
