@@ -92,6 +92,13 @@ public abstract class MainMenuController extends AbstractAction {
         }
     }
 
+    public static class CancelButton implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            EventQueue.invokeLater(() -> clientView.changePanel(ClientView.panels.MAIN));
+        }
+    }
+
     public static class QuitButton implements ActionListener {
 
         @Override
