@@ -1,6 +1,6 @@
-package motor.bloque.gui;
+package motor.bloque.views;
 
-import motor.bloque.handlers.ClientController;
+import motor.bloque.controllers.MainMenuController;
 
 import javax.swing.*;
 
@@ -22,31 +22,31 @@ public class ClientView extends JFrame {
 
         JButton newCardButton = new JButton("New card");
         newCardButton.setToolTipText("Create a new card to use in the system");
-        newCardButton.addActionListener(new ClientController.NewCardButton());
+        newCardButton.addActionListener(new MainMenuController.NewCardButton());
 
         JButton payButton = new JButton("pay");
         payButton.setToolTipText("Makes a payment with a card, provided there are sufficient funds in it");
-        payButton.addActionListener(new ClientController.PayButton());
+        payButton.addActionListener(new MainMenuController.PayButton());
 
         JButton rechargeMoneyButton = new JButton("recharge money");
         rechargeMoneyButton.setToolTipText("recharge the card's balance with more money");
-        rechargeMoneyButton.addActionListener(new ClientController.RechargeMoneyButton());
+        rechargeMoneyButton.addActionListener(new MainMenuController.RechargeMoneyButton());
 
         JButton changePinButton = new JButton("Change PIN");
         changePinButton.setToolTipText("Change the PIN code of a card");
-        changePinButton.addActionListener(new ClientController.ChangePinButton());
+        changePinButton.addActionListener(new MainMenuController.ChangePinButton());
 
         JButton consultBalanceButton = new JButton("Consult balance");
         consultBalanceButton.setToolTipText("Check the amount of money left in a card");
-        consultBalanceButton.addActionListener(new ClientController.ConsultBalanceButton());
+        consultBalanceButton.addActionListener(new MainMenuController.ConsultBalanceButton());
 
         JButton consultMovementsButton = new JButton("Consult movements");
         consultMovementsButton.setToolTipText("Check the movements of a card for the current session");
-        consultMovementsButton.addActionListener(new ClientController.ConsultMovementsButton());
+        consultMovementsButton.addActionListener(new MainMenuController.ConsultMovementsButton());
 
         JButton quitButton = new JButton("Quit");
         quitButton.setToolTipText("Quit program");
-        quitButton.addActionListener(new ClientController.QuitButton());
+        quitButton.addActionListener(new MainMenuController.QuitButton());
 
         setTitle("YUNO pay");
         setSize(800, 600);
