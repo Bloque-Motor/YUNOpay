@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class ExpiredCard extends Exception {
 
-    private final LocalDateTime dateTime;
+    private transient LocalDateTime dateTime;
 
     public ExpiredCard(LocalDateTime dateTime) {
         this.dateTime = dateTime;
