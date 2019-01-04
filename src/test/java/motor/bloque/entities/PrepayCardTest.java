@@ -142,8 +142,7 @@ class PrepayCardTest {
     @Test
     @DisplayName("PrepayCard addMovement invalid card")
     void addMovement1() throws InsufficientFunds, NegativeAmount, ExpiredCard {
-        Movement movement = new CardMovement();
-        movement.setAmount(5);
+        Movement movement = new CardMovement(5);
         assertFalse(emptyCard.addMovement("1111", movement));
     }
 
