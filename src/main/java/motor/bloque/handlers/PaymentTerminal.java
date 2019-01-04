@@ -2,7 +2,7 @@ package motor.bloque.handlers;
 
 
 import motor.bloque.entities.CardMovement;
-import motor.bloque.exceptions.CardExpired;
+import motor.bloque.exceptions.ExpiredCard;
 import motor.bloque.exceptions.InsufficientFunds;
 import motor.bloque.exceptions.NegativeAmount;
 import motor.bloque.exceptions.NoSuchCard;
