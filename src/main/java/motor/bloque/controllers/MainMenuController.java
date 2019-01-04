@@ -1,6 +1,7 @@
-package motor.bloque.handlers;
+package motor.bloque.controllers;
 
-import motor.bloque.gui.ClientView;
+import motor.bloque.handlers.Persistence;
+import motor.bloque.views.ClientView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,9 +10,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-//TODO: This class must handle all operations for the elements on the gui.
+//TODO: This class must handle all operations for the elements on the views.
 
-public abstract class ClientController extends AbstractAction {
+public abstract class MainMenuController extends AbstractAction {
 
     private static ClientView clientView;
 
@@ -19,13 +20,13 @@ public abstract class ClientController extends AbstractAction {
 
         EventQueue.invokeLater(() -> {
             ClientView frame = new ClientView();
-            ClientController.setFrame(frame);
+            MainMenuController.setFrame(frame);
             frame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
                     //if(JOptionPane.showConfirmDialog(frame, "Are you sure ?") == JOptionPane.OK_OPTION){
                     frame.setVisible(false);
-                    new ClientController.QuitButton().actionPerformed(null);
+                    new MainMenuController.QuitButton().actionPerformed(null);
                     frame.dispose();
                     //}
                 }
