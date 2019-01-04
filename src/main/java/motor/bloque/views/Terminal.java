@@ -1,4 +1,4 @@
-package motor.bloque.gui;
+package motor.bloque.views;
 
 import java.util.Scanner;
 
