@@ -102,7 +102,7 @@ public class ClientView extends JFrame {
     }
 
     private void NewCard() {
-        this.currentPanel = (JPanel) getContentPane();;
+        this.currentPanel = (JPanel) getContentPane();
         GroupLayout gl = new GroupLayout(currentPanel);
         currentPanel.setLayout(gl);
         JLabel nameLabel = new JLabel("Name:");
@@ -253,9 +253,6 @@ public class ClientView extends JFrame {
         getContentPane().doLayout();
         update(getGraphics());
     }
-
-
-
 
 }
 
