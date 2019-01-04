@@ -1,6 +1,6 @@
 package motor.bloque.entities;
 
-import motor.bloque.exceptions.CardExpired;
+import motor.bloque.exceptions.ExpiredCard;
 import motor.bloque.exceptions.InsufficientFunds;
 import motor.bloque.exceptions.NegativeAmount;
 import motor.bloque.handlers.Persistence;
@@ -47,21 +47,21 @@ class PrepayCardTest {
 
     @Test
     @DisplayName("PrepayCard getBalance after recharge")
-    void getBalance1() throws NegativeAmount, CardExpired {
+    void getBalance1() throws NegativeAmount, ExpiredCard {
         testCard.recharge(10, "1234");
         assertEquals(10, testCard.getBalance());
     }
 
     @Test
     @DisplayName("PrepayCard recharge with wrong pin")
-    void getBalance2() throws NegativeAmount, CardExpired {
+    void getBalance2() throws NegativeAmount, ExpiredCard {
         assertFalse(testCard.recharge(10, "123"));
         assertEquals(0, testCard.getBalance());
     }
 
     @Test
     @DisplayName("PrepayCard getMovements")
-    void getMovements() throws InsufficientFunds, NegativeAmount, CardExpired {
+    void getMovements() throws InsufficientFunds, NegativeAmount, ExpiredCard {
         Movement movement = new CardMovement();
         movement.setAmount(10);
         testCard.setBalance(20);
@@ -74,7 +74,7 @@ class PrepayCardTest {
 
     @Test
     @DisplayName("PrepayCard change pin")
-    void changePIN() throws NegativeAmount, CardExpired {
+    void changePIN() throws NegativeAmount, ExpiredCard {
         assertTrue(testCard.changePIN("1234", "4321"));
         assertTrue(testCard.recharge(10, "4321"));
         assertEquals(10, testCard.getBalance());
@@ -89,7 +89,7 @@ class PrepayCardTest {
 
     @Test
     @DisplayName("PrepayCard recharge positive amount")
-    void recharge() throws NegativeAmount, CardExpired {
+    void recharge() throws NegativeAmount, ExpiredCard {
         assertTrue(testCard.recharge(25, "1234"));
         assertEquals(25, testCard.getBalance());
     }
@@ -102,13 +102,13 @@ class PrepayCardTest {
 
     @Test
     @DisplayName("PrepayCard recharge invalid card")
-    void recharge3() throws NegativeAmount, CardExpired {
+    void recharge3() throws NegativeAmount, ExpiredCard {
         assertFalse(emptyCard.recharge(10, "1111"));
     }
 
     @Test
     @DisplayName("PrepayCard recharge wrong pin number")
-    void recharge4() throws NegativeAmount, CardExpired {
+    void recharge4() throws NegativeAmount, ExpiredCard {
         assertFalse(testCard.recharge(25, "123"));
         assertEquals(0, testCard.getBalance());
     }
@@ -117,12 +117,12 @@ class PrepayCardTest {
     @DisplayName("PrepayCard recharge after expiration date")
     void recharge5() {
         testCard.setExpirationDate(LocalDateTime.now().minusYears(1));
-        assertThrows(CardExpired.class, () -> testCard.recharge(10, "1234"));
+        assertThrows(ExpiredCard.class, () -> testCard.recharge(10, "1234"));
     }
 
     @Test
     @DisplayName("PrepayCard addMovement")
-    void addMovement() throws InsufficientFunds, NegativeAmount, CardExpired {
+    void addMovement() throws InsufficientFunds, NegativeAmount, ExpiredCard {
         Movement movement = new CardMovement();
         movement.setAmount(10);
         testCard.setBalance(50);
@@ -141,7 +141,7 @@ class PrepayCardTest {
 
     @Test
     @DisplayName("PrepayCard addMovement invalid card")
-    void addMovement1() throws InsufficientFunds, NegativeAmount, CardExpired {
+    void addMovement1() throws InsufficientFunds, NegativeAmount, ExpiredCard {
         Movement movement = new CardMovement();
         movement.setAmount(5);
         assertFalse(emptyCard.addMovement("1111", movement));
@@ -162,7 +162,7 @@ class PrepayCardTest {
         testCard.setBalance(20);
         Movement movement = new CardMovement();
         movement.setAmount(10);
-        assertThrows(CardExpired.class, () -> testCard.addMovement("1234", movement));
+        assertThrows(ExpiredCard.class, () -> testCard.addMovement("1234", movement));
     }
 
     @Test
