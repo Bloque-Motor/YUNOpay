@@ -28,7 +28,7 @@ class PaymentTerminalTest {
 
     @Test
     @DisplayName("PaymentTerminal 2 valid movements")
-    void test1() throws NoSuchCard, NegativeAmount, InsufficientFunds, CardExpired {
+    void test1() throws NoSuchCard, NegativeAmount, InsufficientFunds, ExpiredCard {
         assertTrue(PaymentTerminal.pay(tarjeta.getNumber(), 100, "1234"));
         assertTrue(PaymentTerminal.pay(tarjeta2.getNumber(), 500, "5678"));
     }
@@ -53,7 +53,7 @@ class PaymentTerminalTest {
 
     @Test
     @DisplayName("PaymentTerminal Wrong pin")
-    void test5() throws NoSuchCard, NegativeAmount, InsufficientFunds, CardExpired {
+    void test5() throws NoSuchCard, NegativeAmount, InsufficientFunds, ExpiredCard {
         assertFalse(PaymentTerminal.pay(tarjeta.getNumber(), 100, "0000"));
     }
 }

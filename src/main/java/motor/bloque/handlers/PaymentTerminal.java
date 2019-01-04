@@ -11,7 +11,7 @@ import motor.bloque.interfaces.Movement;
 
 
 class PaymentTerminal {
-    static boolean pay(String cardNumber, int amount, String pin) throws NoSuchCard, NegativeAmount, InsufficientFunds, CardExpired {
+    static boolean pay(String cardNumber, int amount, String pin) throws NoSuchCard, NegativeAmount, InsufficientFunds, ExpiredCard {
         Card cardAux = Persistence.getCard(cardNumber);
         Movement movementAux = new CardMovement(amount);
 

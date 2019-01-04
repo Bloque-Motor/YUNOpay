@@ -1,5 +1,5 @@
 package motor.bloque.entities;
-import motor.bloque.exceptions.CardExpired;
+import motor.bloque.exceptions.ExpiredCard;
 import motor.bloque.exceptions.InsufficientFunds;
 import motor.bloque.exceptions.NegativeAmount;
 import motor.bloque.exceptions.NoSuchCard;
@@ -79,11 +79,11 @@ public class PrepayCard implements Card {
         return true;
     }
 
-    public boolean recharge(int amount, String pin) throws NegativeAmount, CardExpired {
+    public boolean recharge(int amount, String pin) throws NegativeAmount, ExpiredCard {
         try {
             if(!Credentials.validatePassword(pin, cardNumber)) return false;
             if (amount < 0) throw new NegativeAmount();
-            if (this.expirationDate.isBefore(LocalDateTime.now())) throw new CardExpired();
+            if (this.expirationDate.isBefore(LocalDateTime.now())) throw new ExpiredCard(this.expirationDate);
             balance = balance + amount;
         }catch (NoSuchCard e){
             e.printStackTrace();
@@ -92,12 +92,12 @@ public class PrepayCard implements Card {
         return true;
     }
 
-    public boolean addMovement(String pin, Movement movement) throws InsufficientFunds, NegativeAmount, CardExpired {
+    public boolean addMovement(String pin, Movement movement) throws InsufficientFunds, NegativeAmount, ExpiredCard {
         try {
             if(!Credentials.validatePassword(pin, cardNumber)) return false;
             int amount = movement.getAmount();
             if(amount < 0) throw new NegativeAmount();
-            if (this.expirationDate.isBefore(LocalDateTime.now())) throw new CardExpired();
+            if (this.expirationDate.isBefore(LocalDateTime.now())) throw new ExpiredCard(this.expirationDate);
             if((balance - amount) >= 0){
                 balance -= amount;
                 movement.setRemainingBalance(balance);
