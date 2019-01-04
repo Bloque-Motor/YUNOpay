@@ -188,7 +188,7 @@ public class ClientView extends JFrame {
         JPasswordField pinField = new JPasswordField(4);
         JTextField amountField = new JTextField(10);
 
-        setTitle("recharge card");
+        setTitle("Recharge card");
 
         makeCardPinAmountPanel(gl, cardNumberLabel, pinLabel, amountLabel, cardNumberField, pinField, amountField);
     }
@@ -247,12 +247,57 @@ public class ClientView extends JFrame {
         this.currentPanel = (JPanel) getContentPane();
         GroupLayout gl = new GroupLayout(currentPanel);
         currentPanel.setLayout(gl);
+
+        JLabel cardNumberLabel = new JLabel(CARDNUM);
+        JLabel pinLabel = new JLabel(PINSTRING);
+
+        JTextField cardNumberField = new JTextField(10);
+        JPasswordField pinField = new JPasswordField(4);
+
+        setTitle("Consult card balance");
+
+        makeCardPinPanel(gl, cardNumberLabel, pinLabel, cardNumberField, pinField);
     }
 
     private void checkMovements(){
         this.currentPanel = (JPanel) getContentPane();
         GroupLayout gl = new GroupLayout(currentPanel);
         currentPanel.setLayout(gl);
+
+        JLabel cardNumberLabel = new JLabel(CARDNUM);
+        JLabel pinLabel = new JLabel(PINSTRING);
+
+        JTextField cardNumberField = new JTextField(10);
+        JPasswordField pinField = new JPasswordField(4);
+
+        setTitle("Consult card movements");
+
+        makeCardPinPanel(gl, cardNumberLabel, pinLabel, cardNumberField, pinField);
+    }
+
+    private void makeCardPinPanel(GroupLayout gl, JLabel cardNumberLabel, JLabel pinLabel, JTextField cardNumberField, JPasswordField pinField) {
+        gl.setAutoCreateGaps(true);
+        gl.setAutoCreateContainerGaps(true);
+
+        gl.setHorizontalGroup(gl.createSequentialGroup()
+                .addGroup(gl.createParallelGroup(TRAILING)
+                        .addComponent(cardNumberLabel)
+                        .addComponent(pinLabel))
+                .addGroup(gl.createParallelGroup()
+                        .addComponent(cardNumberField)
+                        .addComponent(pinField))
+        );
+
+        gl.setVerticalGroup(gl.createSequentialGroup()
+                .addGroup(gl.createParallelGroup(BASELINE)
+                        .addComponent(cardNumberLabel)
+                        .addComponent(cardNumberField))
+                .addGroup(gl.createParallelGroup(BASELINE)
+                        .addComponent(pinLabel)
+                        .addComponent(pinField))
+        );
+
+        pack();
     }
 
     private void makeCardPinAmountPanel(GroupLayout gl, JLabel cardNumberLabel, JLabel pinLabel, JLabel amountLabel, JTextField cardNumberField, JPasswordField pinField, JTextField amountField) {
