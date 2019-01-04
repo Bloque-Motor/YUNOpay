@@ -45,11 +45,11 @@ public class ClientView extends JFrame {
         newCardButton.setToolTipText("Create a new card to use in the system");
         newCardButton.addActionListener(new MainMenu.NewCardButton());
 
-        JButton payButton = new JButton("pay");
+        JButton payButton = new JButton("Pay");
         payButton.setToolTipText("Makes a payment with a card, provided there are sufficient funds in it");
         payButton.addActionListener(new MainMenu.PayButton());
 
-        JButton rechargeMoneyButton = new JButton("recharge money");
+        JButton rechargeMoneyButton = new JButton("Recharge money");
         rechargeMoneyButton.setToolTipText("recharge the card's balance with more money");
         rechargeMoneyButton.addActionListener(new MainMenu.RechargeMoneyButton());
 
