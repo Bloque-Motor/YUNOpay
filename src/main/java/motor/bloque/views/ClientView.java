@@ -11,20 +11,33 @@ import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
 public class ClientView extends JFrame {
 
     private JPanel currentPanel;
+
     private JTextField nameField;
     private JTextField surnameField;
     private JTextField cardNumberField;
+    private JTextField amountField;
+
     private JPasswordField pinField;
     private JPasswordField newPinField;
     private JPasswordField confirmPinField;
-    private JTextField amountField;
-    private static final String CARDNUM = "Card number:";
-    private static final String PINSTRING = "PIN:";
+
+    private JLabel nameLabel = new JLabel("Name:");
+    private JLabel surnameLabel = new JLabel("Surname:");
+    private JLabel pinLabel = new JLabel("PIN:");
+    private JLabel newPinLabel = new JLabel("New PIN:");
+    private JLabel confirmPinLabel = new JLabel("Confirm new PIN:");
+    private JLabel amountLabel = new JLabel("Amount:");
+    private JLabel cardNumberLabel = new JLabel("Card number:");
+
+    JButton cancelButton = new JButton("Cancel");
+
     public enum panels {MAIN, NEWCARD, PAY, RECHARGE, CHANGEPIN, CHECKBALANCE, CHECKMOVES}
 
 
     public ClientView() {
         mainMenu();
+        cancelButton.setToolTipText("Cancel current operation and return to main menu");
+        cancelButton.addActionListener(new NewCardController.cancelButton());
     }
 
     private void mainMenu() {
@@ -112,12 +125,6 @@ public class ClientView extends JFrame {
         GroupLayout gl = new GroupLayout(currentPanel);
         currentPanel.setLayout(gl);
 
-        JLabel nameLabel = new JLabel("Name:");
-        JLabel surnameLabel = new JLabel("Surname:");
-        JLabel pinLabel = new JLabel(PINSTRING);
-        JLabel confirmpinLabel = new JLabel("Confirm PIN:");
-        JLabel amountLabel = new JLabel("Initial amount:");
-
          nameField = new JTextField(10);
          surnameField = new JTextField(10);
          pinField = new JPasswordField(4);
@@ -125,12 +132,8 @@ public class ClientView extends JFrame {
          amountField = new JTextField(10);
 
         JButton okButton = new JButton("OK");
-        okButton.setToolTipText("Validate data");
+        okButton.setToolTipText("Validate data and perform selected operation");
         okButton.addActionListener(new NewCardController.okButton());
-
-        JButton closeButton = new JButton("Cancel");
-        closeButton.setToolTipText("Cancel current operation and return to main menu");
-        closeButton.addActionListener(new NewCardController.cancelButton());
 
         setTitle("New card");
 
@@ -141,8 +144,8 @@ public class ClientView extends JFrame {
                 .addGroup(gl.createParallelGroup(TRAILING)
                         .addComponent(nameLabel)
                         .addComponent(surnameLabel)
-                        .addComponent(pinLabel)
-                        .addComponent(confirmpinLabel)
+                        .addComponent(newPinLabel)
+                        .addComponent(confirmPinLabel)
                         .addComponent(amountLabel))
                 .addGroup(gl.createParallelGroup()
                         .addComponent(nameField)
@@ -153,7 +156,7 @@ public class ClientView extends JFrame {
                 .addPreferredGap(RELATED, GroupLayout.DEFAULT_SIZE,
                         Short.MAX_VALUE)
                         .addComponent(okButton)
-                        .addComponent(closeButton)
+                        .addComponent(cancelButton)
         );
 
         gl.setVerticalGroup(gl.createSequentialGroup()
@@ -164,10 +167,10 @@ public class ClientView extends JFrame {
                         .addComponent(surnameLabel)
                         .addComponent(surnameField))
                 .addGroup(gl.createParallelGroup(BASELINE)
-                        .addComponent(pinLabel)
+                        .addComponent(newPinLabel)
                         .addComponent(pinField))
                 .addGroup(gl.createParallelGroup(BASELINE)
-                        .addComponent(confirmpinLabel)
+                        .addComponent(confirmPinLabel)
                         .addComponent(confirmPinField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(amountLabel)
@@ -176,50 +179,23 @@ public class ClientView extends JFrame {
                         GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(gl.createParallelGroup()
                         .addComponent(okButton)
-                        .addComponent(closeButton))
+                        .addComponent(cancelButton))
         );
 
-        gl.linkSize(SwingConstants.HORIZONTAL, okButton, closeButton);
+        gl.linkSize(SwingConstants.HORIZONTAL, okButton, cancelButton);
 
         pack();
         
     }
 
     private void pay() {
-        this.currentPanel = (JPanel) getContentPane();
-        GroupLayout gl = new GroupLayout(currentPanel);
-        currentPanel.setLayout(gl);
-
-        JLabel cardNumberLabel = new JLabel(CARDNUM);
-        JLabel pinLabel = new JLabel(PINSTRING);
-        JLabel amountLabel = new JLabel("Amount to pay:");
-
-        cardNumberField = new JTextField(10);
-        pinField = new JPasswordField(4);
-        amountField = new JTextField(10);
-
         setTitle("pay");
-
-        makeCardPinAmountPanel(gl, cardNumberLabel, pinLabel, amountLabel, cardNumberField, pinField, amountField);
-
+        makeCardPinAmountPanel(panels.PAY, cardNumberLabel, pinLabel, amountLabel, cardNumberField, pinField, amountField);
     }
 
     private void recharge() {
-        this.currentPanel = (JPanel) getContentPane();
-        GroupLayout gl = new GroupLayout(currentPanel);
-        currentPanel.setLayout(gl);
-
-        JLabel cardNumberLabel = new JLabel(CARDNUM);
-        JLabel pinLabel = new JLabel(PINSTRING);
-        JLabel amountLabel = new JLabel("Amount to recharge:");
-
-        cardNumberField = new JTextField(10);
-        pinField = new JPasswordField(4);
-        amountField = new JTextField(10);
-
         setTitle("Recharge card");
-
-        makeCardPinAmountPanel(gl, cardNumberLabel, pinLabel, amountLabel, cardNumberField, pinField, amountField);
+        makeCardPinAmountPanel(panels.RECHARGE, cardNumberLabel, pinLabel, amountLabel, cardNumberField, pinField, amountField);
     }
 
     private void changePin() {
@@ -227,15 +203,14 @@ public class ClientView extends JFrame {
         GroupLayout gl = new GroupLayout(currentPanel);
         currentPanel.setLayout(gl);
 
-        JLabel cardNumberLabel = new JLabel(CARDNUM);
-        JLabel oldPinLabel = new JLabel("Old PIN:");
-        JLabel newPinLabel = new JLabel("New PIN:");
-        JLabel confirmPinLabel = new JLabel("Confirm new PIN:");
-
         cardNumberField = new JTextField(10);
         pinField = new JPasswordField(4);
         newPinField = new JPasswordField(4);
         confirmPinField = new JPasswordField(4);
+
+        JButton okButton = new JButton("OK");
+        okButton.setToolTipText("Validate data and perform selected operation");
+        okButton.addActionListener(new ChangePinController.okButton());
 
         gl.setAutoCreateGaps(true);
         gl.setAutoCreateContainerGaps(true);
@@ -243,7 +218,7 @@ public class ClientView extends JFrame {
         gl.setHorizontalGroup(gl.createSequentialGroup()
                 .addGroup(gl.createParallelGroup(TRAILING)
                         .addComponent(cardNumberLabel)
-                        .addComponent(oldPinLabel)
+                        .addComponent(pinLabel)
                         .addComponent(newPinLabel)
                         .addComponent(confirmPinLabel))
                 .addGroup(gl.createParallelGroup()
@@ -251,6 +226,10 @@ public class ClientView extends JFrame {
                         .addComponent(pinField)
                         .addComponent(newPinField)
                         .addComponent(confirmPinField))
+                .addPreferredGap(RELATED, GroupLayout.DEFAULT_SIZE,
+                        Short.MAX_VALUE)
+                .addComponent(okButton)
+                .addComponent(cancelButton)
         );
 
         gl.setVerticalGroup(gl.createSequentialGroup()
@@ -258,7 +237,7 @@ public class ClientView extends JFrame {
                         .addComponent(cardNumberLabel)
                         .addComponent(cardNumberField))
                 .addGroup(gl.createParallelGroup(BASELINE)
-                        .addComponent(oldPinLabel)
+                        .addComponent(pinLabel)
                         .addComponent(pinField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(newPinLabel)
@@ -266,45 +245,47 @@ public class ClientView extends JFrame {
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(confirmPinLabel)
                         .addComponent(confirmPinField))
+                .addPreferredGap(RELATED,
+                        GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(gl.createParallelGroup()
+                        .addComponent(okButton)
+                        .addComponent(cancelButton))
         );
-
         pack();
 
     }
 
     private void checkBalance(){
-        this.currentPanel = (JPanel) getContentPane();
-        GroupLayout gl = new GroupLayout(currentPanel);
-        currentPanel.setLayout(gl);
-
-        JLabel cardNumberLabel = new JLabel(CARDNUM);
-        JLabel pinLabel = new JLabel(PINSTRING);
-
-        cardNumberField = new JTextField(10);
-        pinField = new JPasswordField(4);
-
         setTitle("Consult card balance");
-
-        makeCardPinPanel(gl, cardNumberLabel, pinLabel, cardNumberField, pinField);
+        makeCardPinPanel(panels.CHECKBALANCE, cardNumberLabel, pinLabel, cardNumberField, pinField);
     }
 
     private void checkMovements(){
+        setTitle("Consult card movements");
+        makeCardPinPanel(panels.CHECKMOVES, cardNumberLabel, pinLabel, cardNumberField, pinField);
+    }
+
+    private void makeCardPinPanel(panels pane, JLabel cardNumberLabel, JLabel pinLabel, JTextField cardNumberField, JPasswordField pinField) {
         this.currentPanel = (JPanel) getContentPane();
         GroupLayout gl = new GroupLayout(currentPanel);
         currentPanel.setLayout(gl);
 
-        JLabel cardNumberLabel = new JLabel(CARDNUM);
-        JLabel pinLabel = new JLabel(PINSTRING);
-
         cardNumberField = new JTextField(10);
         pinField = new JPasswordField(4);
 
-        setTitle("Consult card movements");
+        JButton okButton = new JButton("OK");
+        okButton.setToolTipText("Validate data and perform selected operation");
+        switch (pane){
+            case CHECKBALANCE:
+                okButton.addActionListener(new ConsultBalanceController.okButton());
+                break;
+            case CHECKMOVES:
+                okButton.addActionListener(new ConsultMovementsController.okButton());
+                break;
+            default:
+                okButton.addActionListener(new MainMenuController.CancelButton());
+        }
 
-        makeCardPinPanel(gl, cardNumberLabel, pinLabel, cardNumberField, pinField);
-    }
-
-    private void makeCardPinPanel(GroupLayout gl, JLabel cardNumberLabel, JLabel pinLabel, JTextField cardNumberField, JPasswordField pinField) {
         gl.setAutoCreateGaps(true);
         gl.setAutoCreateContainerGaps(true);
 
@@ -315,6 +296,10 @@ public class ClientView extends JFrame {
                 .addGroup(gl.createParallelGroup()
                         .addComponent(cardNumberField)
                         .addComponent(pinField))
+                .addPreferredGap(RELATED, GroupLayout.DEFAULT_SIZE,
+                        Short.MAX_VALUE)
+                .addComponent(okButton)
+                .addComponent(cancelButton)
         );
 
         gl.setVerticalGroup(gl.createSequentialGroup()
@@ -324,12 +309,38 @@ public class ClientView extends JFrame {
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(pinLabel)
                         .addComponent(pinField))
+                .addPreferredGap(RELATED,
+                        GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(gl.createParallelGroup()
+                        .addComponent(okButton)
+                        .addComponent(cancelButton))
         );
 
         pack();
     }
 
-    private void makeCardPinAmountPanel(GroupLayout gl, JLabel cardNumberLabel, JLabel pinLabel, JLabel amountLabel, JTextField cardNumberField, JPasswordField pinField, JTextField amountField) {
+    private void makeCardPinAmountPanel(panels pane, JLabel cardNumberLabel, JLabel pinLabel, JLabel amountLabel, JTextField cardNumberField, JPasswordField pinField, JTextField amountField) {
+        this.currentPanel = (JPanel) getContentPane();
+        GroupLayout gl = new GroupLayout(currentPanel);
+        currentPanel.setLayout(gl);
+
+        cardNumberField = new JTextField(10);
+        pinField = new JPasswordField(4);
+        amountField = new JTextField(10);
+
+        JButton okButton = new JButton("OK");
+        okButton.setToolTipText("Validate data and perform selected operation");
+        switch (pane){
+            case PAY:
+                okButton.addActionListener(new PayController.okButton());
+                break;
+            case RECHARGE:
+                okButton.addActionListener(new RechargeController.okButton());
+                break;
+            default:
+                okButton.addActionListener(new MainMenuController.CancelButton());
+        }
+
         gl.setAutoCreateGaps(true);
         gl.setAutoCreateContainerGaps(true);
 
@@ -342,6 +353,10 @@ public class ClientView extends JFrame {
                         .addComponent(cardNumberField)
                         .addComponent(pinField)
                         .addComponent(amountField))
+                .addPreferredGap(RELATED, GroupLayout.DEFAULT_SIZE,
+                        Short.MAX_VALUE)
+                .addComponent(okButton)
+                .addComponent(cancelButton)
         );
 
         gl.setVerticalGroup(gl.createSequentialGroup()
@@ -354,6 +369,11 @@ public class ClientView extends JFrame {
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(amountLabel)
                         .addComponent(amountField))
+                .addPreferredGap(RELATED,
+                        GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(gl.createParallelGroup()
+                        .addComponent(okButton)
+                        .addComponent(cancelButton))
         );
 
         pack();
