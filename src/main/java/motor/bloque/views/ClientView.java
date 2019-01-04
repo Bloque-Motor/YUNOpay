@@ -5,6 +5,7 @@ import motor.bloque.controllers.MainMenuController;
 import javax.swing.*;
 
 import static javax.swing.GroupLayout.Alignment.*;
+import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
 
 public class ClientView extends JFrame {
 
@@ -102,6 +103,7 @@ public class ClientView extends JFrame {
         this.currentPanel = (JPanel) getContentPane();
         GroupLayout gl = new GroupLayout(currentPanel);
         currentPanel.setLayout(gl);
+
         JLabel nameLabel = new JLabel("Name:");
         JLabel surnameLabel = new JLabel("Surname:");
         JLabel pinLabel = new JLabel(PINSTRING);
@@ -113,6 +115,14 @@ public class ClientView extends JFrame {
         JPasswordField field3 = new JPasswordField(4);
         JPasswordField field4 = new JPasswordField(4);
         JTextField field5 = new JTextField(10);
+
+        JButton okButton = new JButton("OK");
+        okButton.setToolTipText("Validate data");
+        okButton.addActionListener(new NewCardController.okButton());
+
+        JButton closeButton = new JButton("Cancel");
+        closeButton.setToolTipText("Cancel current operation and return to main menu");
+        closeButton.addActionListener(new NewCardController.cancelButton());
 
         setTitle("New card");
 
@@ -132,6 +142,10 @@ public class ClientView extends JFrame {
                         .addComponent(field3)
                         .addComponent(field4)
                         .addComponent(field5))
+                .addPreferredGap(RELATED, GroupLayout.DEFAULT_SIZE,
+                        Short.MAX_VALUE)
+                        .addComponent(okButton)
+                        .addComponent(closeButton)
         );
 
         gl.setVerticalGroup(gl.createSequentialGroup()
@@ -150,7 +164,14 @@ public class ClientView extends JFrame {
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(amountLabel)
                         .addComponent(field5))
+                .addPreferredGap(RELATED,
+                        GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(gl.createParallelGroup()
+                        .addComponent(okButton)
+                        .addComponent(closeButton))
         );
+
+        gl.linkSize(SwingConstants.HORIZONTAL, okButton, closeButton);
 
         pack();
         
