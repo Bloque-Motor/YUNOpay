@@ -12,7 +12,7 @@ import java.awt.event.WindowEvent;
 
 //TODO: This class must handle all operations for the elements on the views.
 
-public abstract class MainMenuController extends AbstractAction {
+public abstract class MainMenu extends AbstractAction {
 
     private static ClientView clientView;
 
@@ -20,13 +20,13 @@ public abstract class MainMenuController extends AbstractAction {
 
         EventQueue.invokeLater(() -> {
             ClientView frame = new ClientView();
-            MainMenuController.setFrame(frame);
+            MainMenu.setFrame(frame);
             frame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
                     //if(JOptionPane.showConfirmDialog(frame, "Are you sure ?") == JOptionPane.OK_OPTION){
                     frame.setVisible(false);
-                    new MainMenuController.QuitButton().actionPerformed(null);
+                    new MainMenu.QuitButton().actionPerformed(null);
                     frame.dispose();
                     //}
                 }

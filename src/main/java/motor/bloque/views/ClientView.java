@@ -1,7 +1,6 @@
 package motor.bloque.views;
 
-import motor.bloque.controllers.MainMenuController;
-import motor.bloque.controllers.NewCardController;
+import motor.bloque.controllers.*;
 
 import javax.swing.*;
 
@@ -37,38 +36,38 @@ public class ClientView extends JFrame {
     public ClientView() {
         mainMenu();
         cancelButton.setToolTipText("Cancel current operation and return to main menu");
-        cancelButton.addActionListener(new NewCardController.cancelButton());
+        cancelButton.addActionListener(new MainMenu.CancelButton());
     }
 
     private void mainMenu() {
 
         JButton newCardButton = new JButton("New card");
         newCardButton.setToolTipText("Create a new card to use in the system");
-        newCardButton.addActionListener(new MainMenuController.NewCardButton());
+        newCardButton.addActionListener(new MainMenu.NewCardButton());
 
         JButton payButton = new JButton("pay");
         payButton.setToolTipText("Makes a payment with a card, provided there are sufficient funds in it");
-        payButton.addActionListener(new MainMenuController.PayButton());
+        payButton.addActionListener(new MainMenu.PayButton());
 
         JButton rechargeMoneyButton = new JButton("recharge money");
         rechargeMoneyButton.setToolTipText("recharge the card's balance with more money");
-        rechargeMoneyButton.addActionListener(new MainMenuController.RechargeMoneyButton());
+        rechargeMoneyButton.addActionListener(new MainMenu.RechargeMoneyButton());
 
         JButton changePinButton = new JButton("Change PIN");
         changePinButton.setToolTipText("Change the PIN code of a card");
-        changePinButton.addActionListener(new MainMenuController.ChangePinButton());
+        changePinButton.addActionListener(new MainMenu.ChangePinButton());
 
         JButton consultBalanceButton = new JButton("Consult balance");
         consultBalanceButton.setToolTipText("Check the amount of money left in a card");
-        consultBalanceButton.addActionListener(new MainMenuController.ConsultBalanceButton());
+        consultBalanceButton.addActionListener(new MainMenu.ConsultBalanceButton());
 
         JButton consultMovementsButton = new JButton("Consult movements");
         consultMovementsButton.setToolTipText("Check the movements of a card for the current session");
-        consultMovementsButton.addActionListener(new MainMenuController.ConsultMovementsButton());
+        consultMovementsButton.addActionListener(new MainMenu.ConsultMovementsButton());
 
         JButton quitButton = new JButton("Quit");
         quitButton.setToolTipText("Quit program");
-        quitButton.addActionListener(new MainMenuController.QuitButton());
+        quitButton.addActionListener(new MainMenu.QuitButton());
 
         setTitle("YUNO pay");
         setSize(800, 600);
@@ -131,9 +130,9 @@ public class ClientView extends JFrame {
          confirmPinField = new JPasswordField(4);
          amountField = new JTextField(10);
 
-        JButton okButton = new JButton("OK");
-        okButton.setToolTipText("Validate data and perform selected operation");
-        okButton.addActionListener(new NewCardController.okButton());
+        JButton OkButton = new JButton("OK");
+        OkButton.setToolTipText("Validate data and perform selected operation");
+        OkButton.addActionListener(new NewCard.OkButton());
 
         setTitle("New card");
 
@@ -155,7 +154,7 @@ public class ClientView extends JFrame {
                         .addComponent(amountField))
                 .addPreferredGap(RELATED, GroupLayout.DEFAULT_SIZE,
                         Short.MAX_VALUE)
-                        .addComponent(okButton)
+                        .addComponent(OkButton)
                         .addComponent(cancelButton)
         );
 
@@ -178,11 +177,11 @@ public class ClientView extends JFrame {
                 .addPreferredGap(RELATED,
                         GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(gl.createParallelGroup()
-                        .addComponent(okButton)
+                        .addComponent(OkButton)
                         .addComponent(cancelButton))
         );
 
-        gl.linkSize(SwingConstants.HORIZONTAL, okButton, cancelButton);
+        gl.linkSize(SwingConstants.HORIZONTAL, OkButton, cancelButton);
 
         pack();
         
@@ -208,9 +207,9 @@ public class ClientView extends JFrame {
         newPinField = new JPasswordField(4);
         confirmPinField = new JPasswordField(4);
 
-        JButton okButton = new JButton("OK");
-        okButton.setToolTipText("Validate data and perform selected operation");
-        okButton.addActionListener(new ChangePinController.okButton());
+        JButton OkButton = new JButton("OK");
+        OkButton.setToolTipText("Validate data and perform selected operation");
+        OkButton.addActionListener(new ChangePin.OkButton());
 
         gl.setAutoCreateGaps(true);
         gl.setAutoCreateContainerGaps(true);
@@ -228,7 +227,7 @@ public class ClientView extends JFrame {
                         .addComponent(confirmPinField))
                 .addPreferredGap(RELATED, GroupLayout.DEFAULT_SIZE,
                         Short.MAX_VALUE)
-                .addComponent(okButton)
+                .addComponent(OkButton)
                 .addComponent(cancelButton)
         );
 
@@ -248,7 +247,7 @@ public class ClientView extends JFrame {
                 .addPreferredGap(RELATED,
                         GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(gl.createParallelGroup()
-                        .addComponent(okButton)
+                        .addComponent(OkButton)
                         .addComponent(cancelButton))
         );
         pack();
@@ -257,15 +256,15 @@ public class ClientView extends JFrame {
 
     private void checkBalance(){
         setTitle("Consult card balance");
-        makeCardPinPanel(panels.CHECKBALANCE, cardNumberLabel, pinLabel, cardNumberField, pinField);
+        makeCardPinPanel(panels.CHECKBALANCE);
     }
 
     private void checkMovements(){
         setTitle("Consult card movements");
-        makeCardPinPanel(panels.CHECKMOVES, cardNumberLabel, pinLabel, cardNumberField, pinField);
+        makeCardPinPanel(panels.CHECKMOVES);
     }
 
-    private void makeCardPinPanel(panels pane, JLabel cardNumberLabel, JLabel pinLabel, JTextField cardNumberField, JPasswordField pinField) {
+    private void makeCardPinPanel(panels pane) {
         this.currentPanel = (JPanel) getContentPane();
         GroupLayout gl = new GroupLayout(currentPanel);
         currentPanel.setLayout(gl);
@@ -273,17 +272,17 @@ public class ClientView extends JFrame {
         cardNumberField = new JTextField(10);
         pinField = new JPasswordField(4);
 
-        JButton okButton = new JButton("OK");
-        okButton.setToolTipText("Validate data and perform selected operation");
+        JButton OkButton = new JButton("OK");
+        OkButton.setToolTipText("Validate data and perform selected operation");
         switch (pane){
             case CHECKBALANCE:
-                okButton.addActionListener(new ConsultBalanceController.okButton());
+                OkButton.addActionListener(new ConsultBalance.OkButton());
                 break;
             case CHECKMOVES:
-                okButton.addActionListener(new ConsultMovementsController.okButton());
+                OkButton.addActionListener(new ConsultMovements.OkButton());
                 break;
             default:
-                okButton.addActionListener(new MainMenuController.CancelButton());
+                OkButton.addActionListener(new MainMenu.CancelButton());
         }
 
         gl.setAutoCreateGaps(true);
@@ -298,7 +297,7 @@ public class ClientView extends JFrame {
                         .addComponent(pinField))
                 .addPreferredGap(RELATED, GroupLayout.DEFAULT_SIZE,
                         Short.MAX_VALUE)
-                .addComponent(okButton)
+                .addComponent(OkButton)
                 .addComponent(cancelButton)
         );
 
@@ -312,7 +311,7 @@ public class ClientView extends JFrame {
                 .addPreferredGap(RELATED,
                         GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(gl.createParallelGroup()
-                        .addComponent(okButton)
+                        .addComponent(OkButton)
                         .addComponent(cancelButton))
         );
 
@@ -328,17 +327,17 @@ public class ClientView extends JFrame {
         pinField = new JPasswordField(4);
         amountField = new JTextField(10);
 
-        JButton okButton = new JButton("OK");
-        okButton.setToolTipText("Validate data and perform selected operation");
+        JButton OkButton = new JButton("OK");
+        OkButton.setToolTipText("Validate data and perform selected operation");
         switch (pane){
             case PAY:
-                okButton.addActionListener(new PayController.okButton());
+                OkButton.addActionListener(new Pay.OkButton());
                 break;
             case RECHARGE:
-                okButton.addActionListener(new RechargeController.okButton());
+                OkButton.addActionListener(new Recharge.OkButton());
                 break;
             default:
-                okButton.addActionListener(new MainMenuController.CancelButton());
+                OkButton.addActionListener(new MainMenu.CancelButton());
         }
 
         gl.setAutoCreateGaps(true);
@@ -355,7 +354,7 @@ public class ClientView extends JFrame {
                         .addComponent(amountField))
                 .addPreferredGap(RELATED, GroupLayout.DEFAULT_SIZE,
                         Short.MAX_VALUE)
-                .addComponent(okButton)
+                .addComponent(OkButton)
                 .addComponent(cancelButton)
         );
 
@@ -372,7 +371,7 @@ public class ClientView extends JFrame {
                 .addPreferredGap(RELATED,
                         GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(gl.createParallelGroup()
-                        .addComponent(okButton)
+                        .addComponent(OkButton)
                         .addComponent(cancelButton))
         );
 
