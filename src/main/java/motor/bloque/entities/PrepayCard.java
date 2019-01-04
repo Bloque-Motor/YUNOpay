@@ -1,10 +1,14 @@
 package motor.bloque.entities;
+
 import motor.bloque.exceptions.ExpiredCard;
 import motor.bloque.exceptions.InsufficientFunds;
 import motor.bloque.exceptions.NegativeAmount;
 import motor.bloque.exceptions.NoSuchCard;
 import motor.bloque.handlers.Credentials;
-import motor.bloque.interfaces.*;
+import motor.bloque.interfaces.Card;
+import motor.bloque.interfaces.Movement;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 public class PrepayCard implements Card {
+
+    private static final Logger logger = LogManager.getLogger(PrepayCard.class);
 
     private String name;
     private String cardNumber;
@@ -73,7 +79,7 @@ public class PrepayCard implements Card {
             this.setHashedPIN(map.get(Credentials.HASHED.PASSWORD));
             this.setSalt(map.get(Credentials.HASHED.SALT));
         }catch (NoSuchCard e){
-            e.printStackTrace();
+            logger.error(e);
             return false;
         }
         return true;
@@ -86,7 +92,7 @@ public class PrepayCard implements Card {
             if (this.expirationDate.isBefore(LocalDateTime.now())) throw new ExpiredCard(this.expirationDate);
             balance = balance + amount;
         }catch (NoSuchCard e){
-            e.printStackTrace();
+            logger.error(e);
             return false;
         }
         return true;
@@ -106,7 +112,7 @@ public class PrepayCard implements Card {
                 throw new InsufficientFunds(amount - balance);
             }
         }catch (NoSuchCard e){
-            e.printStackTrace();
+            logger.error(e);
             return false;
         }
         return true;
