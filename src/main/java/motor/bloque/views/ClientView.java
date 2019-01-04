@@ -1,6 +1,7 @@
 package motor.bloque.views;
 
 import motor.bloque.controllers.MainMenuController;
+import motor.bloque.controllers.NewCardController;
 
 import javax.swing.*;
 
