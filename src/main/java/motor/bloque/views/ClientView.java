@@ -10,6 +10,13 @@ import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
 public class ClientView extends JFrame {
 
     private JPanel currentPanel;
+    private JTextField nameField;
+    private JTextField surnameField;
+    private JTextField cardNumberField;
+    private JPasswordField pinField;
+    private JPasswordField newPinField;
+    private JPasswordField confirmPinField;
+    private JTextField amountField;
     private static final String CARDNUM = "Card number:";
     private static final String PINSTRING = "PIN:";
     public enum panels {MAIN, NEWCARD, PAY, RECHARGE, CHANGEPIN, CHECKBALANCE, CHECKMOVES}
@@ -110,11 +117,11 @@ public class ClientView extends JFrame {
         JLabel confirmpinLabel = new JLabel("Confirm PIN:");
         JLabel amountLabel = new JLabel("Initial amount:");
 
-        JTextField nameField = new JTextField(10);
-        JTextField surnameField = new JTextField(10);
-        JPasswordField pinField = new JPasswordField(4);
-        JPasswordField confirmPinField = new JPasswordField(4);
-        JTextField amountField = new JTextField(10);
+         nameField = new JTextField(10);
+         surnameField = new JTextField(10);
+         pinField = new JPasswordField(4);
+         confirmPinField = new JPasswordField(4);
+         amountField = new JTextField(10);
 
         JButton okButton = new JButton("OK");
         okButton.setToolTipText("Validate data");
@@ -186,9 +193,9 @@ public class ClientView extends JFrame {
         JLabel pinLabel = new JLabel(PINSTRING);
         JLabel amountLabel = new JLabel("Amount to pay:");
 
-        JTextField cardNumberField = new JTextField(10);
-        JPasswordField pinField = new JPasswordField(4);
-        JTextField amountField = new JTextField(10);
+        cardNumberField = new JTextField(10);
+        pinField = new JPasswordField(4);
+        amountField = new JTextField(10);
 
         setTitle("pay");
 
@@ -205,9 +212,9 @@ public class ClientView extends JFrame {
         JLabel pinLabel = new JLabel(PINSTRING);
         JLabel amountLabel = new JLabel("Amount to recharge:");
 
-        JTextField cardNumberField = new JTextField(10);
-        JPasswordField pinField = new JPasswordField(4);
-        JTextField amountField = new JTextField(10);
+        cardNumberField = new JTextField(10);
+        pinField = new JPasswordField(4);
+        amountField = new JTextField(10);
 
         setTitle("Recharge card");
 
@@ -224,10 +231,10 @@ public class ClientView extends JFrame {
         JLabel newPinLabel = new JLabel("New PIN:");
         JLabel confirmPinLabel = new JLabel("Confirm new PIN:");
 
-        JTextField cardNumberField = new JTextField(10);
-        JPasswordField oldPinField = new JPasswordField(4);
-        JPasswordField newPinField = new JPasswordField(4);
-        JPasswordField confirmPinField = new JPasswordField(4);
+        cardNumberField = new JTextField(10);
+        pinField = new JPasswordField(4);
+        newPinField = new JPasswordField(4);
+        confirmPinField = new JPasswordField(4);
 
         gl.setAutoCreateGaps(true);
         gl.setAutoCreateContainerGaps(true);
@@ -240,7 +247,7 @@ public class ClientView extends JFrame {
                         .addComponent(confirmPinLabel))
                 .addGroup(gl.createParallelGroup()
                         .addComponent(cardNumberField)
-                        .addComponent(oldPinField)
+                        .addComponent(pinField)
                         .addComponent(newPinField)
                         .addComponent(confirmPinField))
         );
@@ -251,7 +258,7 @@ public class ClientView extends JFrame {
                         .addComponent(cardNumberField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(oldPinLabel)
-                        .addComponent(oldPinField))
+                        .addComponent(pinField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(newPinLabel)
                         .addComponent(newPinField))
@@ -272,8 +279,8 @@ public class ClientView extends JFrame {
         JLabel cardNumberLabel = new JLabel(CARDNUM);
         JLabel pinLabel = new JLabel(PINSTRING);
 
-        JTextField cardNumberField = new JTextField(10);
-        JPasswordField pinField = new JPasswordField(4);
+        cardNumberField = new JTextField(10);
+        pinField = new JPasswordField(4);
 
         setTitle("Consult card balance");
 
@@ -288,8 +295,8 @@ public class ClientView extends JFrame {
         JLabel cardNumberLabel = new JLabel(CARDNUM);
         JLabel pinLabel = new JLabel(PINSTRING);
 
-        JTextField cardNumberField = new JTextField(10);
-        JPasswordField pinField = new JPasswordField(4);
+        cardNumberField = new JTextField(10);
+        pinField = new JPasswordField(4);
 
         setTitle("Consult card movements");
 
@@ -349,6 +356,34 @@ public class ClientView extends JFrame {
         );
 
         pack();
+    }
+
+    public JTextField getNameField(){
+        return nameField;
+    }
+
+    public JPasswordField getConfirmPinField() {
+        return confirmPinField;
+    }
+
+    public JPasswordField getNewPinField() {
+        return newPinField;
+    }
+
+    public JPasswordField getPinField() {
+        return pinField;
+    }
+
+    public JTextField getCardNumberField() {
+        return cardNumberField;
+    }
+
+    public JTextField getSurnameField() {
+        return surnameField;
+    }
+
+    public JTextField getAmountField() {
+        return amountField;
     }
 
     public void changePanel(panels panels) {
