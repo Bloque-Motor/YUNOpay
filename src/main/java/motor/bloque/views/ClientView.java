@@ -110,11 +110,11 @@ public class ClientView extends JFrame {
         JLabel confirmpinLabel = new JLabel("Confirm PIN:");
         JLabel amountLabel = new JLabel("Initial amount:");
 
-        JTextField field1 = new JTextField(10);
-        JTextField field2 = new JTextField(10);
-        JPasswordField field3 = new JPasswordField(4);
-        JPasswordField field4 = new JPasswordField(4);
-        JTextField field5 = new JTextField(10);
+        JTextField nameField = new JTextField(10);
+        JTextField surnameField = new JTextField(10);
+        JPasswordField pinField = new JPasswordField(4);
+        JPasswordField confirmPinField = new JPasswordField(4);
+        JTextField amountField = new JTextField(10);
 
         JButton okButton = new JButton("OK");
         okButton.setToolTipText("Validate data");
@@ -137,11 +137,11 @@ public class ClientView extends JFrame {
                         .addComponent(confirmpinLabel)
                         .addComponent(amountLabel))
                 .addGroup(gl.createParallelGroup()
-                        .addComponent(field1)
-                        .addComponent(field2)
-                        .addComponent(field3)
-                        .addComponent(field4)
-                        .addComponent(field5))
+                        .addComponent(nameField)
+                        .addComponent(surnameField)
+                        .addComponent(pinField)
+                        .addComponent(confirmPinField)
+                        .addComponent(amountField))
                 .addPreferredGap(RELATED, GroupLayout.DEFAULT_SIZE,
                         Short.MAX_VALUE)
                         .addComponent(okButton)
@@ -151,19 +151,19 @@ public class ClientView extends JFrame {
         gl.setVerticalGroup(gl.createSequentialGroup()
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(nameLabel)
-                        .addComponent(field1))
+                        .addComponent(nameField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(surnameLabel)
-                        .addComponent(field2))
+                        .addComponent(surnameField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(pinLabel)
-                        .addComponent(field3))
+                        .addComponent(pinField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(confirmpinLabel)
-                        .addComponent(field4))
+                        .addComponent(confirmPinField))
                 .addGroup(gl.createParallelGroup(BASELINE)
                         .addComponent(amountLabel)
-                        .addComponent(field5))
+                        .addComponent(amountField))
                 .addPreferredGap(RELATED,
                         GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(gl.createParallelGroup()
