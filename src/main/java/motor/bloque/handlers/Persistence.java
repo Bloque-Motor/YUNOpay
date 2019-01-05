@@ -66,10 +66,10 @@ public class Persistence {
 
     public static boolean saveAll() {
         JSONObject data = new JSONObject();
-        Integer[] cardNumbers = cards.keySet().toArray(new Integer[cards.keySet().size()]);
-
-        for (Integer num : cardNumbers){
-            Card card = cards.get(num);
+        Iterator<String> it = cards.keySet().iterator();
+        while (it.hasNext()){
+            String key = it.next();
+            Card card = cards.get(key);
             JSONObject cardDetails = new JSONObject();
             cardDetails.put("name", card.getName());
             cardDetails.put("number", card.getNumber());
@@ -78,7 +78,7 @@ public class Persistence {
             cardDetails.put("balance", card.getBalance());
             cardDetails.put("Expiration Date", card.getExpirationDate().toString());
 
-            data.put(num.toString(), cardDetails);
+            data.put(card.getNumber(), cardDetails);
         }
 
         boolean result = true;
