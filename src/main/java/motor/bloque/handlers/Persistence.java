@@ -2,6 +2,7 @@ package motor.bloque.handlers;
 
 import motor.bloque.entities.CardMovement;
 import motor.bloque.entities.PrepayCard;
+import motor.bloque.exceptions.IncorrectPin;
 import motor.bloque.exceptions.NoSuchCard;
 import motor.bloque.interfaces.Card;
 import motor.bloque.interfaces.Movement;
@@ -20,13 +21,20 @@ public class Persistence {
 
     private static Map<String,Card> cards = new HashMap<>();
 
-    public static Card getCard(String cardNumber) throws NoSuchCard{
-        if(cards.containsKey(cardNumber)) return cards.get(cardNumber);
+    public static Card getCard(String cardNumber, String pin) throws NoSuchCard, IncorrectPin {
+        if(cards.containsKey(cardNumber)){
+            if(Credentials.validatePassword(pin, cardNumber)) return cards.get(cardNumber);
+            throw new IncorrectPin();
+        }
         throw new NoSuchCard(cardNumber);
     }
 
     public static void putCard(Card card){
         cards.put(card.getNumber(), card);
+    }
+
+    public static boolean existsCard(String cardNumber){
+        return cards.containsKey(cardNumber);
     }
 
     public static void loadPersistence(){
@@ -90,4 +98,9 @@ public class Persistence {
         throw new IllegalStateException("Utility class");
     }
 
+    public static void requestCredentials(String cardNumber) {
+        Card card = cards.get(cardNumber);
+        Credentials.setPin(card.getHashedPIN());
+        Credentials.setSalt(card.getSalt());
+    }
 }

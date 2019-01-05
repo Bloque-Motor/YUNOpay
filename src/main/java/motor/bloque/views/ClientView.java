@@ -280,6 +280,8 @@ public class ClientView extends JFrame {
         switch (pane){
             case CHECKBALANCE:
                 OkButton.addActionListener(new ConsultBalance.OkButton());
+                cardNumberField.getDocument().addDocumentListener(new ConsultBalance.CardNumberReader());
+                pinField.getDocument().addDocumentListener(new ConsultBalance.PinReader());
                 break;
             case CHECKMOVES:
                 OkButton.addActionListener(new ConsultMovements.OkButton());
