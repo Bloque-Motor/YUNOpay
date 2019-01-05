@@ -50,7 +50,7 @@ class PaymentTerminalTest {
 
     @Test
     @DisplayName("PaymentTerminal Wrong pin")
-    void test5() throws NoSuchCard, NegativeAmount, InsufficientFunds, ExpiredCard, IncorrectPin {
-        assertFalse(PaymentTerminal.pay(tarjeta.getNumber(), 100, "0000"));
+    void test5()  {
+        assertThrows(IncorrectPin.class, () ->PaymentTerminal.pay(tarjeta.getNumber(), 100, "0000"));
     }
 }
