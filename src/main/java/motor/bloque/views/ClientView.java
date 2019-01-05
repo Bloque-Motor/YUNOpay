@@ -4,6 +4,8 @@ import motor.bloque.controllers.*;
 
 import javax.swing.*;
 
+import java.awt.*;
+
 import static javax.swing.GroupLayout.Alignment.*;
 import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
 
@@ -27,10 +29,11 @@ public class ClientView extends JFrame {
     private JLabel confirmPinLabel = new JLabel("Confirm new PIN:");
     private JLabel amountLabel = new JLabel("Amount:");
     private JLabel cardNumberLabel = new JLabel("Card number:");
+    private String ticket;
 
     JButton cancelButton = new JButton("Cancel");
 
-    public enum panels {MAIN, NEWCARD, PAY, RECHARGE, CHANGEPIN, CHECKBALANCE, CHECKMOVES}
+    public enum panels {MAIN, NEWCARD, PAY, RECHARGE, CHANGEPIN, CHECKBALANCE, CHECKMOVES, TICKET}
 
 
     public ClientView() {
@@ -378,6 +381,43 @@ public class ClientView extends JFrame {
         pack();
     }
 
+    private void ticket(){
+        this.currentPanel = (JPanel) getContentPane();
+        GroupLayout gl = new GroupLayout(currentPanel);
+        currentPanel.setLayout(gl);
+
+        JLabel ticketLabel = new JLabel(ticket);
+        ticketLabel.setFont(new Font("Serif", Font.PLAIN, 14));
+        ticketLabel.setForeground(new Color(50, 50, 25));
+
+        JButton OkButton = new JButton("OK");
+        OkButton.setToolTipText("Finish current operation and go back to main menu");
+        OkButton.addActionListener(new Ticket.OkButton());
+
+        gl.setAutoCreateContainerGaps(true);
+
+        gl.setHorizontalGroup(gl.createSequentialGroup()
+                .addComponent(ticketLabel)
+                .addPreferredGap(RELATED, GroupLayout.DEFAULT_SIZE,
+                        Short.MAX_VALUE)
+                .addComponent(OkButton)
+        );
+
+        gl.setVerticalGroup(gl.createSequentialGroup()
+                .addGroup(gl.createParallelGroup(BASELINE)
+                .addComponent(ticketLabel))
+                .addPreferredGap(RELATED,
+                        GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(gl.createParallelGroup()
+                        .addComponent(OkButton))
+        );
+        pack();
+    }
+
+    public void setTicket(String text){
+        this.ticket = text;
+    }
+
     public JTextField getNameField(){
         return nameField;
     }
@@ -426,6 +466,9 @@ public class ClientView extends JFrame {
                 break;
             case CHECKMOVES:
                 checkMovements();
+                break;
+            case TICKET:
+                ticket();
                 break;
             case MAIN:
             default:
