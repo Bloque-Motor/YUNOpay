@@ -70,11 +70,9 @@ public class PrepayCard implements Card {
     }
 
     public boolean changePIN(String newPIN) {
-
         Map<Credentials.HASHED, String> map = Credentials.hashNewPassword(newPIN);
         this.setHashedPIN(map.get(Credentials.HASHED.PASSWORD));
         this.setSalt(map.get(Credentials.HASHED.SALT));
-
         return true;
     }
 

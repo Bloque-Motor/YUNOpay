@@ -1,5 +1,9 @@
 package motor.bloque.controllers;
 
+import motor.bloque.exceptions.IncorrectPin;
+import motor.bloque.exceptions.NoSuchCard;
+import motor.bloque.handlers.Persistence;
+import motor.bloque.interfaces.Card;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,15 +17,30 @@ import java.awt.event.ActionListener;
 
 public abstract class ConsultBalance extends AbstractAction {
     private static final Logger logger = LogManager.getLogger(ConsultBalance.class);
-    private static String cardNumber;
-    private static String pin;
+    private static String cardNumber = new String();
+    private static String pin = new String();
 
     public static class OkButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println("Ok button pressed");
-            System.out.println("Card number: " + cardNumber);
-            System.out.println("PIN: " + pin);
+            if (cardNumber.length() != 12) {
+                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect card number format", "Error", JOptionPane.ERROR_MESSAGE);
+            } else if (pin.length() != 4) {
+                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect PIN format", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                try {
+                    Card card = Persistence.getCard(cardNumber, pin);
+                    cardNumber = new String();
+                    pin = new String();
+                    //Unset the fields for security reasons.
+                    Ticket.balanceMessage(card.getNumber(), card.getBalance(), card.getName());
+                } catch (NoSuchCard nsc) {
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), nsc.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (IncorrectPin ip) {
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), ip.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         }
     }
 
