@@ -20,7 +20,7 @@ public class PrepayCard implements Card {
     private String cardNumber;
     private String hashedPIN;
     private String salt;
-    private int balance;
+    private double balance;
     private List<Movement> movements;
     private LocalDateTime expirationDate;
 
@@ -29,8 +29,8 @@ public class PrepayCard implements Card {
         this.movements = new ArrayList<>();
     }
 
-    public PrepayCard(String name, String surname, String pin, int amount) {
-        this.name = name + surname;
+    public PrepayCard(String name, String surname, String pin, double amount) {
+        this.name = name + " " + surname;
         Map<Credentials.HASHED, String> hashed = Credentials.hashNewPassword(pin);
         this.hashedPIN = hashed.get(Credentials.HASHED.PASSWORD);
         this.salt = hashed.get(Credentials.HASHED.SALT);
@@ -56,7 +56,7 @@ public class PrepayCard implements Card {
         return salt;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
@@ -76,7 +76,7 @@ public class PrepayCard implements Card {
         return true;
     }
 
-    public boolean recharge(int amount) throws NegativeAmount, ExpiredCard {
+    public boolean recharge(double amount) throws NegativeAmount, ExpiredCard {
         if (amount < 0) throw new NegativeAmount();
         if (this.expirationDate.isBefore(LocalDateTime.now())) throw new ExpiredCard(this.expirationDate);
         balance = balance + amount;
@@ -84,7 +84,7 @@ public class PrepayCard implements Card {
     }
 
     public boolean addMovement(Movement movement) throws InsufficientFunds, NegativeAmount, ExpiredCard {
-        int amount = movement.getAmount();
+        double amount = movement.getAmount();
         if (amount < 0) throw new NegativeAmount();
         if (this.expirationDate.isBefore(LocalDateTime.now())) throw new ExpiredCard(this.expirationDate);
         if ((balance - amount) >= 0) {
@@ -113,7 +113,7 @@ public class PrepayCard implements Card {
         this.salt = salt;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 

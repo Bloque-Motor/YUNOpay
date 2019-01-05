@@ -10,7 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,55 +21,66 @@ import java.util.*;
 
 public class Persistence {
 
-    private static Map<String,Card> cards = new HashMap<>();
+    private static Map<String, Card> cards = new HashMap<>();
 
     public static Card getCard(String cardNumber, String pin) throws NoSuchCard, IncorrectPin {
-        if(cards.containsKey(cardNumber)){
-            if(Credentials.validatePassword(pin, cardNumber)) return cards.get(cardNumber);
+        if (cards.containsKey(cardNumber)) {
+            if (Credentials.validatePassword(pin, cardNumber)) return cards.get(cardNumber);
             throw new IncorrectPin();
         }
         throw new NoSuchCard(cardNumber);
     }
 
-    public static void putCard(Card card){
+    public static void putCard(Card card) {
         cards.put(card.getNumber(), card);
     }
 
-    public static boolean existsCard(String cardNumber){
+    public static boolean existsCard(String cardNumber) {
         return cards.containsKey(cardNumber);
     }
 
-    public static void loadPersistence(){
-        String resourceName = "data.json";
-        InputStream is = Persistence.class.getResourceAsStream(resourceName);
-        if (is == null) {
-            cards = new HashMap<>();
-        }else {
-            JSONTokener tokener = new JSONTokener(is);
-            JSONObject data = new JSONObject(tokener);
-            Iterator<String> it = data.keys();
-            while(it.hasNext()) {
-                String key = it.next();
-                if (data.get(key) instanceof JSONObject) {
-                    JSONObject cardJSON = (JSONObject) data.get(key);
-                    Card card = new PrepayCard();
-                    card.setName(cardJSON.getString("name"));
-                    card.setNumber(cardJSON.getString("number"));
-                    card.setHashedPIN(cardJSON.getString("hashedPIN"));
-                    card.setSalt(cardJSON.getString("salt"));
-                    card.setBalance(cardJSON.getInt("balance"));
-                    card.setExpirationDate(LocalDateTime.parse(cardJSON.getString("Expiration Date")));
+    public static void loadPersistence() {
+        String result = "";
+        cards = new HashMap<>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("data.json"));
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+            while (line != null) {
+                sb.append(line);
+                line = br.readLine();
+            }
+            result = sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-                    cards.put(card.getNumber(), card);
-                }
+        JSONTokener tokener = new JSONTokener(result);
+        JSONObject data = new JSONObject(tokener);
+        Iterator<String> it = data.keys();
+        while (it.hasNext()) {
+            String key = it.next();
+            if (data.get(key) instanceof JSONObject) {
+                JSONObject cardJSON = (JSONObject) data.get(key);
+                Card card = new PrepayCard();
+                card.setName(cardJSON.getString("name"));
+                card.setNumber(cardJSON.getString("number"));
+                card.setHashedPIN(cardJSON.getString("hashedPIN"));
+                card.setSalt(cardJSON.getString("salt"));
+                card.setBalance(cardJSON.getInt("balance"));
+                card.setExpirationDate(LocalDateTime.parse(cardJSON.getString("Expiration Date")));
+
+                cards.put(card.getNumber(), card);
+                System.out.println("Card recovered");
             }
         }
+
     }
 
     public static boolean saveAll() {
         JSONObject data = new JSONObject();
         Iterator<String> it = cards.keySet().iterator();
-        while (it.hasNext()){
+        while (it.hasNext()) {
             String key = it.next();
             Card card = cards.get(key);
             JSONObject cardDetails = new JSONObject();
@@ -94,7 +107,7 @@ public class Persistence {
         return result;
     }
 
-    private Persistence(){
+    private Persistence() {
         throw new IllegalStateException("Utility class");
     }
 

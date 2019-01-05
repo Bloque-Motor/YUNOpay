@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 
 public interface Movement {
 
-    void setAmount(int amount);
-    void setRemainingBalance(int remainingBalance);
+    void setAmount(double amount);
+    void setRemainingBalance(double remainingBalance);
     void setDate(LocalDateTime date);
-    int getAmount();
-    int getRemainingBalance();
+    double getAmount();
+    double getRemainingBalance();
     LocalDateTime getDate();
 }

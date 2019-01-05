@@ -13,21 +13,20 @@ public interface Card {
     String getNumber();
     String getHashedPIN();
     String getSalt();
-    int getBalance();
+    double getBalance();
     List<Movement> getMovements();
     LocalDateTime getExpirationDate();
 
     boolean changePIN(String newPIN);
-    boolean recharge(int amount) throws NegativeAmount, ExpiredCard;
+    boolean recharge(double amount) throws NegativeAmount, ExpiredCard;
     boolean addMovement(Movement movement) throws InsufficientFunds, NegativeAmount, ExpiredCard;
 
     void setName(String name);
     void setNumber(String number);
     void setHashedPIN(String hashedPIN);
     void setSalt(String salt);
-    void setBalance(int balance);
+    void setBalance(double balance);
     void setMovements(List<Movement> movements);
     void setExpirationDate(LocalDateTime expirationDate);
-
 
 }
