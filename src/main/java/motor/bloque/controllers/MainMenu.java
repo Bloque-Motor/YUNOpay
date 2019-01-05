@@ -39,6 +39,10 @@ public abstract class MainMenu extends AbstractAction {
         clientView = frame;
     }
 
+    static ClientView getFrame() {
+        return clientView;
+    }
+
     public static class NewCardButton implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e){
