@@ -1,10 +1,7 @@
 package motor.bloque.handlers;
 
 import motor.bloque.entities.PrepayCard;
-import motor.bloque.exceptions.ExpiredCard;
-import motor.bloque.exceptions.InsufficientFunds;
-import motor.bloque.exceptions.NegativeAmount;
-import motor.bloque.exceptions.NoSuchCard;
+import motor.bloque.exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +25,7 @@ class PaymentTerminalTest {
 
     @Test
     @DisplayName("PaymentTerminal 2 valid movements")
-    void test1() throws NoSuchCard, NegativeAmount, InsufficientFunds, ExpiredCard {
+    void test1() throws NoSuchCard, NegativeAmount, InsufficientFunds, ExpiredCard, IncorrectPin {
         assertTrue(PaymentTerminal.pay(tarjeta.getNumber(), 100, "1234"));
         assertTrue(PaymentTerminal.pay(tarjeta2.getNumber(), 500, "5678"));
     }
@@ -53,7 +50,7 @@ class PaymentTerminalTest {
 
     @Test
     @DisplayName("PaymentTerminal Wrong pin")
-    void test5() throws NoSuchCard, NegativeAmount, InsufficientFunds, ExpiredCard {
-        assertFalse(PaymentTerminal.pay(tarjeta.getNumber(), 100, "0000"));
+    void test5()  {
+        assertThrows(IncorrectPin.class, () ->PaymentTerminal.pay(tarjeta.getNumber(), 100, "0000"));
     }
 }

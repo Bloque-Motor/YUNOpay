@@ -1,9 +1,6 @@
 package motor.bloque.entities;
 
-import motor.bloque.exceptions.ExpiredCard;
-import motor.bloque.exceptions.InsufficientFunds;
-import motor.bloque.exceptions.NegativeAmount;
-import motor.bloque.exceptions.NoSuchCard;
+import motor.bloque.exceptions.*;
 import motor.bloque.handlers.Credentials;
 import motor.bloque.interfaces.Card;
 import motor.bloque.interfaces.Movement;
@@ -27,12 +24,12 @@ public class PrepayCard implements Card {
     private List<Movement> movements;
     private LocalDateTime expirationDate;
 
-    public PrepayCard(){
+    public PrepayCard() {
 
-       this.movements = new ArrayList<>();
+        this.movements = new ArrayList<>();
     }
 
-    public PrepayCard(String name, String surname, String pin, int amount){
+    public PrepayCard(String name, String surname, String pin, int amount) {
         this.name = name + surname;
         Map<Credentials.HASHED, String> hashed = Credentials.hashNewPassword(pin);
         this.hashedPIN = hashed.get(Credentials.HASHED.PASSWORD);
@@ -46,7 +43,7 @@ public class PrepayCard implements Card {
     public String getName() {
         return name;
     }
-    
+
     public String getNumber() {
         return cardNumber;
     }
@@ -67,53 +64,37 @@ public class PrepayCard implements Card {
         return movements;
     }
 
-    public LocalDateTime getExpirationDate(){
+    public LocalDateTime getExpirationDate() {
 
         return expirationDate;
     }
 
-    public boolean changePIN(String oldPIN, String newPIN) {
-        try {
-            if(!Credentials.validatePassword(oldPIN, cardNumber)) return false;
-            Map<Credentials.HASHED, String> map = Credentials.hashNewPassword(newPIN);
-            this.setHashedPIN(map.get(Credentials.HASHED.PASSWORD));
-            this.setSalt(map.get(Credentials.HASHED.SALT));
-        }catch (NoSuchCard e){
-            logger.error(e);
-            return false;
-        }
+    public boolean changePIN(String newPIN) {
+
+        Map<Credentials.HASHED, String> map = Credentials.hashNewPassword(newPIN);
+        this.setHashedPIN(map.get(Credentials.HASHED.PASSWORD));
+        this.setSalt(map.get(Credentials.HASHED.SALT));
+
         return true;
     }
 
-    public boolean recharge(int amount, String pin) throws NegativeAmount, ExpiredCard {
-        try {
-            if(!Credentials.validatePassword(pin, cardNumber)) return false;
-            if (amount < 0) throw new NegativeAmount();
-            if (this.expirationDate.isBefore(LocalDateTime.now())) throw new ExpiredCard(this.expirationDate);
-            balance = balance + amount;
-        }catch (NoSuchCard e){
-            logger.error(e);
-            return false;
-        }
+    public boolean recharge(int amount) throws NegativeAmount, ExpiredCard {
+        if (amount < 0) throw new NegativeAmount();
+        if (this.expirationDate.isBefore(LocalDateTime.now())) throw new ExpiredCard(this.expirationDate);
+        balance = balance + amount;
         return true;
     }
 
-    public boolean addMovement(String pin, Movement movement) throws InsufficientFunds, NegativeAmount, ExpiredCard {
-        try {
-            if(!Credentials.validatePassword(pin, cardNumber)) return false;
-            int amount = movement.getAmount();
-            if(amount < 0) throw new NegativeAmount();
-            if (this.expirationDate.isBefore(LocalDateTime.now())) throw new ExpiredCard(this.expirationDate);
-            if((balance - amount) >= 0){
-                balance -= amount;
-                movement.setRemainingBalance(balance);
-                movements.add(movement);
-            }else{
-                throw new InsufficientFunds(amount - balance);
-            }
-        }catch (NoSuchCard e){
-            logger.error(e);
-            return false;
+    public boolean addMovement(Movement movement) throws InsufficientFunds, NegativeAmount, ExpiredCard {
+        int amount = movement.getAmount();
+        if (amount < 0) throw new NegativeAmount();
+        if (this.expirationDate.isBefore(LocalDateTime.now())) throw new ExpiredCard(this.expirationDate);
+        if ((balance - amount) >= 0) {
+            balance -= amount;
+            movement.setRemainingBalance(balance);
+            movements.add(movement);
+        } else {
+            throw new InsufficientFunds(amount - balance);
         }
         return true;
     }
@@ -133,7 +114,7 @@ public class PrepayCard implements Card {
     public void setSalt(String salt) {
         this.salt = salt;
     }
-    
+
     public void setBalance(int balance) {
         this.balance = balance;
     }
@@ -142,5 +123,7 @@ public class PrepayCard implements Card {
         this.movements = movements;
     }
 
-    public void setExpirationDate(LocalDateTime expirationDate){ this.expirationDate = expirationDate; }
+    public void setExpirationDate(LocalDateTime expirationDate) {
+        this.expirationDate = expirationDate;
+    }
 }

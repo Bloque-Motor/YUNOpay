@@ -18,6 +18,8 @@ public class Credentials {
 
     private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
     private static Random random = new Random();
+    private static String salt;
+    private static String hashedPin;
 
     public static Map<HASHED, String> hashNewPassword(String passwordToHash) {
         try {
@@ -34,12 +36,13 @@ public class Credentials {
     }
 
     public static boolean validatePassword(String password, String cardNumber) throws NoSuchCard {
-        Card card = Persistence.getCard(cardNumber);
-        String salt = card.getSalt();
-
+        Persistence.requestCredentials(cardNumber);
         String toValidate = getSecurePassword(password, hexStringToByteArray(salt));
-        if (toValidate != null) return toValidate.equals(card.getHashedPIN());
-        return false;
+        boolean validated = false;
+        if (toValidate != null) validated = toValidate.equals(hashedPin);
+        salt = new String();
+        hashedPin = new String();
+        return validated;
     }
 
     public static String generateCardNumber() {
@@ -49,12 +52,16 @@ public class Credentials {
             digits[i] = (char) (random.nextInt(10) + '0');
         }
         String cardNumber = new String(digits);
-        try {
-            Persistence.getCard(cardNumber);
-        } catch (NoSuchCard e) {
-            return cardNumber;
-        }
-        return generateCardNumber();
+        if(Persistence.existsCard(cardNumber)) return generateCardNumber();
+        return cardNumber;
+    }
+
+    public static void setSalt(String salt){
+        Credentials.salt = salt;
+    }
+
+    public static void setPin(String hashedPin) {
+        Credentials.hashedPin = hashedPin;
     }
 
     private static String bytesToHex(byte[] bytes) {

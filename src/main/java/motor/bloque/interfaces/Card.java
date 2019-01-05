@@ -17,9 +17,9 @@ public interface Card {
     List<Movement> getMovements();
     LocalDateTime getExpirationDate();
 
-    boolean changePIN(String oldPIN, String newPIN);
-    boolean recharge(int amount, String pin) throws NegativeAmount, ExpiredCard;
-    boolean addMovement(String pin, Movement movement) throws InsufficientFunds, NegativeAmount, ExpiredCard;
+    boolean changePIN(String newPIN);
+    boolean recharge(int amount) throws NegativeAmount, ExpiredCard;
+    boolean addMovement(Movement movement) throws InsufficientFunds, NegativeAmount, ExpiredCard;
 
     void setName(String name);
     void setNumber(String number);

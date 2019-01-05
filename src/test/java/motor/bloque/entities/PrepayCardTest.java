@@ -1,8 +1,7 @@
+
 package motor.bloque.entities;
 
-import motor.bloque.exceptions.ExpiredCard;
-import motor.bloque.exceptions.InsufficientFunds;
-import motor.bloque.exceptions.NegativeAmount;
+import motor.bloque.exceptions.*;
 import motor.bloque.handlers.Persistence;
 import motor.bloque.interfaces.Movement;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,24 +18,29 @@ class PrepayCardTest {
 
     private PrepayCard testCard;
     private PrepayCard emptyCard;
+    private String cardNumber;
+    private String emptyCardNumber;
 
     @BeforeEach
     void setPrepayCard() {
         testCard = new PrepayCard("TestName", "Test Surname", "1234", 0);
         emptyCard = new PrepayCard();
         Persistence.putCard(testCard);
+        Persistence.putCard(emptyCard);
+        cardNumber = testCard.getNumber();
+        emptyCardNumber = emptyCard.getNumber();
     }
 
     @Test
     @DisplayName("PrepayCard getName")
-    void getName() {
-        assertEquals("TestName" + "Test Surname", testCard.getName());
+    void getName() throws NoSuchCard, IncorrectPin  {
+        assertEquals("TestName" + "Test Surname", Persistence.getCard(cardNumber,"1234").getName());
     }
 
     @Test
     @DisplayName("PrepayCard change pin invalid card")
-    void invalidCard() {
-        assertFalse(emptyCard.changePIN("1234", "4321"));
+    void invalidCard(){
+        assertThrows(IncorrectPin.class, () ->  Persistence.getCard(cardNumber,"4321"));
     }
 
     @Test
@@ -47,87 +51,86 @@ class PrepayCardTest {
 
     @Test
     @DisplayName("PrepayCard getBalance after recharge")
-    void getBalance1() throws NegativeAmount, ExpiredCard {
-        testCard.recharge(10, "1234");
-        assertEquals(10, testCard.getBalance());
+    void getBalance1() throws NegativeAmount, ExpiredCard,NoSuchCard, IncorrectPin {
+        Persistence.getCard(cardNumber,"1234").recharge(10);
+        assertEquals(10, Persistence.getCard(cardNumber,"1234").getBalance());
     }
 
     @Test
     @DisplayName("PrepayCard recharge with wrong pin")
-    void getBalance2() throws NegativeAmount, ExpiredCard {
-        assertFalse(testCard.recharge(10, "123"));
-        assertEquals(0, testCard.getBalance());
+    void getBalance2(){
+        assertThrows(IncorrectPin.class, () -> Persistence.getCard(cardNumber,"123").recharge(10));
     }
 
     @Test
     @DisplayName("PrepayCard getMovements")
-    void getMovements() throws InsufficientFunds, NegativeAmount, ExpiredCard {
+    void getMovements() throws InsufficientFunds, NegativeAmount, ExpiredCard, NoSuchCard, IncorrectPin {
         Movement movement = new CardMovement();
         movement.setAmount(10);
-        testCard.setBalance(20);
-        testCard.addMovement("1234", movement);
-        System.out.println(testCard.getBalance());
+        Persistence.getCard(cardNumber,"1234").setBalance(20);
+        Persistence.getCard(cardNumber,"1234").addMovement(movement);
+       // System.out.println(testCard.getBalance());
 
-        assertEquals(movement, testCard.getMovements().get(0));
+        assertEquals(movement, Persistence.getCard(cardNumber,"1234").getMovements().get(0));
     }
 
 
     @Test
     @DisplayName("PrepayCard change pin")
-    void changePIN() throws NegativeAmount, ExpiredCard {
-        assertTrue(testCard.changePIN("1234", "4321"));
-        assertTrue(testCard.recharge(10, "4321"));
-        assertEquals(10, testCard.getBalance());
+    void changePIN() throws NegativeAmount, ExpiredCard, NoSuchCard, IncorrectPin {
+        assertTrue(Persistence.getCard(cardNumber,"1234").changePIN("4321"));
+        assertTrue(Persistence.getCard(cardNumber,"4321").recharge(10));
+        assertEquals(10, Persistence.getCard(cardNumber,"4321").getBalance());
 
     }
 
     @Test
     @DisplayName("PrepayCard change pin (Wrong pin number)")
-    void changePIN2() {
-        assertFalse(testCard.changePIN("123", "4321"));
+    void changePIN2(){
+        assertThrows(IncorrectPin.class, () -> Persistence.getCard(cardNumber,"123").changePIN("4321"));
     }
 
     @Test
     @DisplayName("PrepayCard recharge positive amount")
-    void recharge() throws NegativeAmount, ExpiredCard {
-        assertTrue(testCard.recharge(25, "1234"));
-        assertEquals(25, testCard.getBalance());
+    void recharge() throws NegativeAmount, ExpiredCard, NoSuchCard, IncorrectPin {
+        assertTrue(Persistence.getCard(cardNumber,"1234").recharge(25));
+        assertEquals(25, Persistence.getCard(cardNumber,"1234").getBalance());
     }
 
     @Test
     @DisplayName("PrepayCard recharge negative amount")
     void recharge2() {
-        assertThrows(NegativeAmount.class, () -> testCard.recharge(-10, "1234"));
+        assertThrows(NegativeAmount.class, () -> Persistence.getCard(cardNumber,"1234").recharge(-10));
     }
 
     @Test
     @DisplayName("PrepayCard recharge invalid card")
-    void recharge3() throws NegativeAmount, ExpiredCard {
-        assertFalse(emptyCard.recharge(10, "1111"));
+    void recharge3(){
+        assertThrows(NullPointerException.class, () ->Persistence.getCard(emptyCardNumber,"1111").recharge(10));
     }
 
     @Test
     @DisplayName("PrepayCard recharge wrong pin number")
-    void recharge4() throws NegativeAmount, ExpiredCard {
-        assertFalse(testCard.recharge(25, "123"));
-        assertEquals(0, testCard.getBalance());
+    void recharge4() throws NegativeAmount, ExpiredCard, NoSuchCard, IncorrectPin {
+        assertThrows(IncorrectPin.class, () ->Persistence.getCard(cardNumber,"123").recharge(25));
+        assertEquals(0, Persistence.getCard(cardNumber,"1234").getBalance());
     }
 
     @Test
     @DisplayName("PrepayCard recharge after expiration date")
-    void recharge5() {
-        testCard.setExpirationDate(LocalDateTime.now().minusYears(1));
-        assertThrows(ExpiredCard.class, () -> testCard.recharge(10, "1234"));
+    void recharge5() throws  NoSuchCard, IncorrectPin{
+        Persistence.getCard(cardNumber,"1234").setExpirationDate(LocalDateTime.now().minusYears(1));
+        assertThrows(ExpiredCard.class, () -> Persistence.getCard(cardNumber,"1234").recharge(10));
     }
 
     @Test
     @DisplayName("PrepayCard addMovement")
-    void addMovement() throws InsufficientFunds, NegativeAmount, ExpiredCard {
+    void addMovement() throws InsufficientFunds, NegativeAmount, ExpiredCard, NoSuchCard, IncorrectPin {
         Movement movement = new CardMovement();
         movement.setAmount(10);
-        testCard.setBalance(50);
-        testCard.addMovement("1234", movement);
-        assertEquals(40, testCard.getBalance());
+        Persistence.getCard(cardNumber,"1234").setBalance(50);
+        Persistence.getCard(cardNumber,"1234").addMovement(movement);
+        assertEquals(40,  Persistence.getCard(cardNumber,"1234").getBalance());
     }
 
     @Test
@@ -136,14 +139,15 @@ class PrepayCardTest {
         Movement movement = new CardMovement();
         movement.setAmount(10);
 
-        assertThrows(InsufficientFunds.class, () -> testCard.addMovement("1234", movement));
+        assertThrows(InsufficientFunds.class, () -> Persistence.getCard(cardNumber,"1234").addMovement( movement));
     }
 
     @Test
     @DisplayName("PrepayCard addMovement invalid card")
     void addMovement1() throws InsufficientFunds, NegativeAmount, ExpiredCard {
         Movement movement = new CardMovement(5);
-        assertFalse(emptyCard.addMovement("1111", movement));
+        assertThrows(NullPointerException.class, () ->Persistence.getCard(emptyCardNumber,"1111").addMovement(movement));
+
     }
 
     @Test
@@ -151,39 +155,39 @@ class PrepayCardTest {
     void addMovement2() {
         Movement movement = new CardMovement();
         movement.setAmount(-10);
-        assertThrows(NegativeAmount.class, () -> testCard.addMovement("1234", movement));
+        assertThrows(NegativeAmount.class, () -> Persistence.getCard(cardNumber,"1234").addMovement(movement));
     }
 
     @Test
     @DisplayName("PrepayCard addMovement after expiration date")
-    void addMovement3() {
-        testCard.setExpirationDate(LocalDateTime.now().minusYears(1));
-        testCard.setBalance(20);
+    void addMovement3() throws  NoSuchCard, IncorrectPin {
+        Persistence.getCard(cardNumber,"1234").setExpirationDate(LocalDateTime.now().minusYears(1));
+        Persistence.getCard(cardNumber,"1234").setBalance(20);
         Movement movement = new CardMovement();
         movement.setAmount(10);
-        assertThrows(ExpiredCard.class, () -> testCard.addMovement("1234", movement));
+        assertThrows(ExpiredCard.class, () ->  Persistence.getCard(cardNumber,"1234").addMovement(movement));
     }
 
     @Test
     @DisplayName("PrepayCard set a new name")
-    void setNewName() {
+    void setNewName() throws  NoSuchCard, IncorrectPin  {
 
-        testCard.setName("Francisco");
-        assertEquals("Francisco", testCard.getName());
+        Persistence.getCard(cardNumber,"1234").setName("Francisco");
+        assertEquals("Francisco", Persistence.getCard(cardNumber,"1234").getName());
     }
 
     @Test
     @DisplayName("PrepayCard set a new number")
-    void setNewNumber() {
+    void setNewNumber()  throws  NoSuchCard, IncorrectPin {
 
-        testCard.setNumber("190319961994");
-        assertEquals("190319961994", testCard.getNumber());
+        Persistence.getCard(cardNumber,"1234").setNumber("190319961994");
+        assertEquals("190319961994", Persistence.getCard(cardNumber,"1234").getNumber());
 
     }
 
     @Test
     @DisplayName("PrepayCard set a new list of movements")
-    void setNewMovements() {
+    void setNewMovements() throws  NoSuchCard, IncorrectPin {
         Movement movement = new CardMovement();
         movement.setAmount(10);
         Movement movement1 = new CardMovement();
@@ -191,16 +195,16 @@ class PrepayCardTest {
         List<Movement> movements = new ArrayList<>();
         movements.add(movement);
         movements.add(movement1);
-        testCard.setMovements(movements);
-        assertEquals(movements, testCard.getMovements());
+        Persistence.getCard(cardNumber,"1234").setMovements(movements);
+        assertEquals(movements, Persistence.getCard(cardNumber,"1234").getMovements());
     }
 
     @Test
     @DisplayName("PrepayCard get expiration date")
-    void getExpirationDate() {
+    void getExpirationDate() throws  NoSuchCard, IncorrectPin{
         LocalDateTime dateTime = LocalDateTime.now();
-        testCard.setExpirationDate(dateTime);
-        assertEquals(dateTime, testCard.getExpirationDate());
+        Persistence.getCard(cardNumber,"1234").setExpirationDate(dateTime);
+        assertEquals(dateTime, Persistence.getCard(cardNumber,"1234").getExpirationDate());
     }
 
 }
