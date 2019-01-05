@@ -285,6 +285,8 @@ public class ClientView extends JFrame {
                 break;
             case CHECKMOVES:
                 OkButton.addActionListener(new ConsultMovements.OkButton());
+                cardNumberField.getDocument().addDocumentListener(new ConsultMovements.CardNumberReader());
+                pinField.getDocument().addDocumentListener(new ConsultMovements.PinReader());
                 break;
             default:
                 OkButton.addActionListener(new MainMenu.CancelButton());
