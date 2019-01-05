@@ -2,10 +2,10 @@ package motor.bloque.exceptions;
 
 public class InsufficientFunds extends Exception {
 
-    private final int shortBy;
+    private final double shortBy;
 
 
-    public InsufficientFunds(int shortBy){
+    public InsufficientFunds(double shortBy){
         this.shortBy = shortBy;
     }
 

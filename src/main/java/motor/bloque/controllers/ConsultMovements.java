@@ -34,7 +34,7 @@ public abstract class ConsultMovements extends AbstractAction {
                     cardNumber = new String();
                     pin = new String();
                     //Unset the fields for security reasons.
-                    Ticket.movementsMessage(card.getNumber(), card.getMovements(), card.getName());
+                    Ticket.movements(card.getNumber(), card.getMovements(), card.getName());
                 } catch (NoSuchCard nsc) {
                     JOptionPane.showMessageDialog(MainMenu.getFrame(), nsc.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 } catch (IncorrectPin ip) {

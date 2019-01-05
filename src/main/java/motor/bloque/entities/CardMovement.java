@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 
 public class CardMovement implements Movement {
 
-    private int amount;
-    private int remainingBalance;
+    private double amount;
+    private double remainingBalance;
     private LocalDateTime date;
 
-    public CardMovement(int amount){
+    public CardMovement(double amount){
         this.amount = amount;
         date = LocalDateTime.now();
     }
@@ -19,12 +19,12 @@ public class CardMovement implements Movement {
     public CardMovement(){}
 
     @Override
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
     @Override
-    public void setRemainingBalance(int remainingBalance) {
+    public void setRemainingBalance(double remainingBalance) {
         this.remainingBalance = remainingBalance;
     }
 
@@ -34,12 +34,12 @@ public class CardMovement implements Movement {
     }
 
     @Override
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
     @Override
-    public int getRemainingBalance() {
+    public double getRemainingBalance() {
         return remainingBalance;
     }
 

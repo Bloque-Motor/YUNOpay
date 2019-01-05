@@ -20,23 +20,33 @@ public abstract class Ticket extends AbstractAction {
         }
     }
 
-    public static void balanceMessage(String cardNumber, int balance, String name){
-        StringBuilder ticket = new StringBuilder("Dear " + name + "<br><br>Card Number: ");
-        String hiddenNumber = "XXXX XXXX " + cardNumber.substring(7);
-        ticket.append(hiddenNumber + "<br>" + "Balance: " + balance);
+    public static void newCard(String cardNumber, String name, double balance){
+        StringBuilder ticket = new StringBuilder("<html>Dear " + name + "<br><br>Amount: " + String.format("%.2f", balance));
+        ticket.append("<br>Card Number: " + cardNumber + "<br>Balance: " + String.format("%.2f", balance));
+        ticket.append("<br><br>Thanks for using our system</html>");
         MainMenu.getFrame().setTicket(ticket.toString());
         EventQueue.invokeLater(() ->MainMenu.getFrame().changePanel(ClientView.panels.TICKET));
     }
 
-    public static void movementsMessage(String cardNumber, List<Movement> movements, String name) {
-        StringBuilder ticket = new StringBuilder("Dear " + name + "<br><br>Card Number: ");
+    public static void balance(String cardNumber, double balance, String name){
+        StringBuilder ticket = new StringBuilder("<html>Dear " + name + "<br><br>Card Number: ");
+        String hiddenNumber = "XXXX XXXX " + cardNumber.substring(7);
+        ticket.append(hiddenNumber + "<br>" + "Balance: " + String.format("%.2f", balance));
+        ticket.append("<br><br>Thanks for using our system</html>");
+        MainMenu.getFrame().setTicket(ticket.toString());
+        EventQueue.invokeLater(() ->MainMenu.getFrame().changePanel(ClientView.panels.TICKET));
+    }
+
+    public static void movements(String cardNumber, List<Movement> movements, String name) {
+        StringBuilder ticket = new StringBuilder("<html>Dear " + name + "<br><br>Card Number: ");
         String hiddenNumber = "XXXX XXXX " + cardNumber.substring(7);
         ticket.append(hiddenNumber + "<br><br>");
         for(Movement move : movements){
             LocalDateTime date = move.getDate();
             ticket.append(date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear()%100);
-            ticket.append(" " + move.getAmount() + "<br>");
+            ticket.append(" " + String.format("%.2f", move.getAmount()) + "<br>");
         }
+        ticket.append("<br>Thanks for using our system</html>");
         MainMenu.getFrame().setTicket(ticket.toString());
         EventQueue.invokeLater(() ->MainMenu.getFrame().changePanel(ClientView.panels.TICKET));
     }

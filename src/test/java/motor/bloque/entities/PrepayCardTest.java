@@ -34,7 +34,7 @@ class PrepayCardTest {
     @Test
     @DisplayName("PrepayCard getName")
     void getName() throws NoSuchCard, IncorrectPin  {
-        assertEquals("TestName" + "Test Surname", Persistence.getCard(cardNumber,"1234").getName());
+        assertEquals("TestName" + " Test Surname", Persistence.getCard(cardNumber,"1234").getName());
     }
 
     @Test
