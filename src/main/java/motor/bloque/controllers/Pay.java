@@ -47,12 +47,12 @@ public abstract class Pay extends AbstractAction {
                     JOptionPane.showMessageDialog(MainMenu.getFrame(), nsc.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 } catch (IncorrectPin ip) {
                     JOptionPane.showMessageDialog(MainMenu.getFrame(), ip.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                } catch (ExpiredCard expiredCard) {
-                    expiredCard.printStackTrace();
-                } catch (InsufficientFunds insufficientFunds) {
-                    insufficientFunds.printStackTrace();
-                } catch (NegativeAmount negativeAmount) {
-                    negativeAmount.printStackTrace();
+                } catch (ExpiredCard ec) {
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), ec.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (InsufficientFunds iF) {
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), iF.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (NegativeAmount na) {
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), na.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
