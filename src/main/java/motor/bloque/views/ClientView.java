@@ -351,6 +351,9 @@ public class ClientView extends JFrame {
                 break;
             case RECHARGE:
                 okButton.addActionListener(new Recharge.OkButton());
+                cardNumberField.getDocument().addDocumentListener(new Recharge.CardNumberReader());
+                pinField.getDocument().addDocumentListener(new Recharge.PinReader());
+                amountField.getDocument().addDocumentListener(new Recharge.AmountReader());
                 break;
             default:
                 okButton.addActionListener(new MainMenu.CancelButton());
