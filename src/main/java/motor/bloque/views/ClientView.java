@@ -216,9 +216,16 @@ public class ClientView extends JFrame {
         currentPanel.setLayout(gl);
 
         cardNumberField = new JTextField(10);
+        confirmPinField.getDocument().addDocumentListener(new ChangePin.CardNumberReader());
+
         pinField = new JPasswordField(4);
+        pinField.getDocument().addDocumentListener(new ChangePin.PinReader());
+
         newPinField = new JPasswordField(4);
+        newPinField.getDocument().addDocumentListener(new ChangePin.NewPinReader());
+
         confirmPinField = new JPasswordField(4);
+        confirmPinField.getDocument().addDocumentListener(new ChangePin.ConfirmPinReader());
 
         JButton OkButton = new JButton("OK");
         OkButton.setToolTipText("Validate data and perform selected operation");

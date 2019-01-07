@@ -25,16 +25,18 @@ public abstract class NewCard extends AbstractAction {
     private static String confirmPin = new String();
     private static String initialAmount = new String();
 
+    private static final String ERROR = "Error";
+
     public static class OkButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (name.isEmpty() || surname.isEmpty() || pin.isEmpty() || confirmPin.isEmpty()) {
-                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Fields cannot be empty");
+                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Fields cannot be empty", ERROR, JOptionPane.ERROR_MESSAGE);
                 logger.error("Some fields are empty");
             }else if (pin.length() != 4) {
-                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect PIN format", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect PIN format", ERROR, JOptionPane.ERROR_MESSAGE);
             }else if (!pin.equals(confirmPin)){
-                JOptionPane.showMessageDialog(MainMenu.getFrame(), "PINs don't match", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainMenu.getFrame(), "PINs don't match", ERROR, JOptionPane.ERROR_MESSAGE);
             }else {
                 logger.info("Ok button pressed");
 
