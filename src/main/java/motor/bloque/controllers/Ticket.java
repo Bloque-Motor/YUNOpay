@@ -12,53 +12,64 @@ import java.util.List;
 
 public abstract class Ticket extends AbstractAction {
 
+    private static final String BYE = "<br><br>Thanks for using our system</html>";
+
     public static class OkButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Ok button pressed");
             EventQueue.invokeLater(() ->MainMenu.getFrame().changePanel(ClientView.panels.MAIN));
         }
     }
 
     public static void newCard(String cardNumber, String name, double balance){
-        StringBuilder ticket = new StringBuilder("<html>Dear " + name + "<br><br>Amount: " + String.format("%.2f", balance));
+        StringBuilder ticket = new StringBuilder(hi(name) + "<br><br>Amount: " + String.format("%.2f", balance));
         ticket.append("<br>Card Number: " + cardNumber + "<br>Balance: " + String.format("%.2f", balance));
-        ticket.append("<br><br>Thanks for using our system</html>");
+        ticket.append(BYE);
         MainMenu.getFrame().setTicket(ticket.toString());
         EventQueue.invokeLater(() ->MainMenu.getFrame().changePanel(ClientView.panels.TICKET));
     }
 
     public static void balance(String cardNumber, double balance, String name){
-        StringBuilder ticket = new StringBuilder("<html>Dear " + name + "<br><br>Card Number: ");
-        String hiddenNumber = "XXXX XXXX " + cardNumber.substring(7);
-        ticket.append(hiddenNumber + "<br>" + "Balance: " + String.format("%.2f", balance));
-        ticket.append("<br><br>Thanks for using our system</html>");
+        StringBuilder ticket = new StringBuilder(hi(name) + "<br><br>Card Number: ");
+        ticket.append(hideCardNumber(cardNumber) + "<br>" + "Balance: " + String.format("%.2f", balance));
+        ticket.append(BYE);
         MainMenu.getFrame().setTicket(ticket.toString());
         EventQueue.invokeLater(() ->MainMenu.getFrame().changePanel(ClientView.panels.TICKET));
     }
 
     public static void movements(String cardNumber, List<Movement> movements, String name) {
-        StringBuilder ticket = new StringBuilder("<html>Dear " + name + "<br><br>Card Number: ");
-        String hiddenNumber = "XXXX XXXX " + cardNumber.substring(7);
-        ticket.append(hiddenNumber + "<br><br>");
+        StringBuilder ticket = new StringBuilder(hi(name) + "<br><br>Card Number: ");
+        ticket.append(hideCardNumber(cardNumber) + "<br><br>");
         for(Movement move : movements){
             LocalDateTime date = move.getDate();
-            ticket.append(date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear()%100);
-            ticket.append(" " + String.format("%.2f", move.getAmount()) + "<br>");
+            ticket.append("<br>" + date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear()%100);
+            ticket.append(" " + String.format("%.2f", move.getAmount()));
         }
-        ticket.append("<br>Thanks for using our system</html>");
+        ticket.append(BYE);
         MainMenu.getFrame().setTicket(ticket.toString());
         EventQueue.invokeLater(() ->MainMenu.getFrame().changePanel(ClientView.panels.TICKET));
     }
 
     public static void pay(String cardNumber, double balance, String name, double amount) {
-        StringBuilder ticket = new StringBuilder("<html>Dear " + name + "<br><br>Amount: ");
+        StringBuilder ticket = new StringBuilder(hi(name) + "<br><br>Amount: ");
         ticket.append(String.format("%.2f", amount) + "<br>");
-        String hiddenNumber = "XXXX XXXX " + cardNumber.substring(7);
-        ticket.append("Card Number: " + hiddenNumber + "<br>" + "Balance: " + String.format("%.2f", balance));
-        ticket.append("<br><br>Thanks for using our system</html>");
+        ticket.append("Card Number: " + hideCardNumber(cardNumber) + "<br>" + "Balance: " + String.format("%.2f", balance));
+        ticket.append(BYE);
         MainMenu.getFrame().setTicket(ticket.toString());
         EventQueue.invokeLater(() ->MainMenu.getFrame().changePanel(ClientView.panels.TICKET));
+    }
+
+    public static void changePin(String name) {
+        MainMenu.getFrame().setTicket(hi(name) + "<br><br>The operation was completed successfully." + BYE);
+        EventQueue.invokeLater(() ->MainMenu.getFrame().changePanel(ClientView.panels.TICKET));
+    }
+
+    private static String hideCardNumber (String cardNumber){
+        return "XXXX XXXX " + cardNumber.substring(7);
+    }
+
+    private static String hi (String name){
+        return "<html>Dear " + name;
     }
 
 }
