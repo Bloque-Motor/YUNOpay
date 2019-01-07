@@ -2,7 +2,6 @@ package motor.bloque.controllers;
 
 import motor.bloque.entities.PrepayCard;
 import motor.bloque.handlers.Persistence;
-import motor.bloque.views.ClientView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,21 +10,20 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 public abstract class NewCard extends AbstractAction {
     private static final Logger logger = LogManager.getLogger(NewCard.class);
 
-    private static String name = new String();
-    private static String surname = new String();
-    private static String pin = new String();
-    private static String confirmPin = new String();
-    private static String initialAmount = new String();
+    private static String name;
+    private static String surname;
+    private static String pin;
+    private static String confirmPin;
+    private static String initialAmount;
 
     private static final String ERROR = "Error";
+    private static final String BL = "Bad location";
 
     public static class OkButton implements ActionListener {
         @Override
@@ -44,11 +42,11 @@ public abstract class NewCard extends AbstractAction {
                 logger.info("Attempting to create new card with the following data: " + name + " " + surname + " " + " " + initialAmount);
                 PrepayCard newCard = new PrepayCard(name, surname, pin, initialAmount);
                 Persistence.putCard(newCard);
-                name = new String();
-                surname = new String();
-                pin = new String();
-                confirmPin = new String();
-                NewCard.initialAmount = new String();
+                name = null;
+                surname = null;
+                pin = null;
+                confirmPin = null;
+                NewCard.initialAmount = null;
                 Ticket.newCard(newCard.getNumber(),newCard.getName(),newCard.getBalance());
             }
         }
@@ -77,7 +75,7 @@ public abstract class NewCard extends AbstractAction {
             try{
                 NewCard.name = doc.getText(0, len);
             }catch (BadLocationException ex){
-                logger.warn("Bad location", ex);
+                logger.warn(BL, ex);
             }
         }
 
@@ -106,7 +104,7 @@ public abstract class NewCard extends AbstractAction {
             try{
                 NewCard.surname = doc.getText(0, len);
             }catch (BadLocationException ex){
-                logger.warn("Bad location", ex);
+                logger.warn(BL, ex);
             }
         }
 
@@ -135,7 +133,7 @@ public abstract class NewCard extends AbstractAction {
             try{
                 NewCard.pin = doc.getText(0, len);
             }catch (BadLocationException ex){
-                logger.warn("Bad location", ex);
+                logger.warn(BL, ex);
             }
         }
 
@@ -164,7 +162,7 @@ public abstract class NewCard extends AbstractAction {
             try{
                 NewCard.confirmPin = doc.getText(0, len);
             }catch (BadLocationException ex){
-                logger.warn("Bad location", ex);
+                logger.warn(BL, ex);
             }
         }
     }
@@ -192,7 +190,7 @@ public abstract class NewCard extends AbstractAction {
             try{
                 NewCard.initialAmount = doc.getText(0, len);
             }catch (BadLocationException ex){
-                logger.warn("Bad location", ex);
+                logger.warn(BL, ex);
             }
         }
 
