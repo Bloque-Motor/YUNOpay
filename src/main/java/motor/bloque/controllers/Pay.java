@@ -19,17 +19,18 @@ public abstract class Pay extends AbstractAction {
     private static String pin;
     private static String cardNumber;
     private static String amount;
+    private static final String ERROR = "Error";
+    private static final String BL = "Bad Location";
 
     private static final Logger logger = LogManager.getLogger(Pay.class);
 
     public static class OkButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Ok button pressed");
             if (cardNumber.length() != 12) {
-                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect card number format", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect card number format", ERROR, JOptionPane.ERROR_MESSAGE);
             } else if (pin.length() != 4) {
-                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect PIN format", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect PIN format", ERROR, JOptionPane.ERROR_MESSAGE);
             } else if (amount.isEmpty()) {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "Amount field cannot be empty");
             }else{
@@ -37,22 +38,21 @@ public abstract class Pay extends AbstractAction {
                     double amount = Double.parseDouble(Pay.amount);
                     Card card = Persistence.getCard(cardNumber, pin);
                     card.addMovement(new CardMovement(amount));
-                    cardNumber = new String();
-                    pin = new String();
-                    Pay.amount = new String();
+                    cardNumber = null;
+                    pin = null;
+                    Pay.amount = null;
                     //Unset the fields for security reasons.
                     Ticket.pay(card.getNumber(), card.getBalance(), card.getName(), amount);
-                    //TODO: Exception handling
                 } catch (NoSuchCard nsc) {
-                    JOptionPane.showMessageDialog(MainMenu.getFrame(), nsc.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), nsc.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                 } catch (IncorrectPin ip) {
-                    JOptionPane.showMessageDialog(MainMenu.getFrame(), ip.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), ip.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                 } catch (ExpiredCard ec) {
-                    JOptionPane.showMessageDialog(MainMenu.getFrame(), ec.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), ec.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                 } catch (InsufficientFunds iF) {
-                    JOptionPane.showMessageDialog(MainMenu.getFrame(), iF.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), iF.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                 } catch (NegativeAmount na) {
-                    JOptionPane.showMessageDialog(MainMenu.getFrame(), na.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), na.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
@@ -80,7 +80,7 @@ public abstract class Pay extends AbstractAction {
             try{
                 Pay.cardNumber = doc.getText(0, len);
             }catch (BadLocationException ex){
-                logger.warn("Bad location", ex);
+                logger.warn(BL, ex);
             }
         }
     }
@@ -107,7 +107,7 @@ public abstract class Pay extends AbstractAction {
             try{
                 Pay.pin = doc.getText(0, len);
             }catch (BadLocationException ex){
-                logger.warn("Bad location", ex);
+                logger.warn(BL, ex);
             }
         }
     }
@@ -134,7 +134,7 @@ public abstract class Pay extends AbstractAction {
             try{
                 Pay.amount = doc.getText(0, len);
             }catch (BadLocationException ex){
-                logger.warn("Bad location", ex);
+                logger.warn(BL, ex);
             }
         }
     }
