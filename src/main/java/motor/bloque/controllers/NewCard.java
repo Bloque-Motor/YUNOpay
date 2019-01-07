@@ -38,7 +38,7 @@ public abstract class NewCard extends AbstractAction {
             }else {
                 logger.info("Ok button pressed");
 
-                int initialAmount = Integer.parseInt(NewCard.initialAmount);
+                double initialAmount = Double.parseDouble(NewCard.initialAmount);
                 logger.info("Attempting to create new card with the following data: " + name + " " + surname + " " + " " + initialAmount);
                 PrepayCard newCard = new PrepayCard(name, surname, pin, initialAmount);
                 Persistence.putCard(newCard);

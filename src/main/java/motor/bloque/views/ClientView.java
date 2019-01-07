@@ -349,6 +349,9 @@ public class ClientView extends JFrame {
         switch (pane){
             case PAY:
                 OkButton.addActionListener(new Pay.OkButton());
+                cardNumberField.getDocument().addDocumentListener(new Pay.CardNumberReader());
+                pinField.getDocument().addDocumentListener(new Pay.PinReader());
+                amountField.getDocument().addDocumentListener(new Pay.AmountReader());
                 break;
             case RECHARGE:
                 OkButton.addActionListener(new Recharge.OkButton());

@@ -51,5 +51,14 @@ public abstract class Ticket extends AbstractAction {
         EventQueue.invokeLater(() ->MainMenu.getFrame().changePanel(ClientView.panels.TICKET));
     }
 
+    public static void pay(String cardNumber, double balance, String name, double amount) {
+        StringBuilder ticket = new StringBuilder("<html>Dear " + name + "<br><br>Amount: ");
+        ticket.append(String.format("%.2f", amount) + "<br>");
+        String hiddenNumber = "XXXX XXXX " + cardNumber.substring(7);
+        ticket.append("Card Number: " + hiddenNumber + "<br>" + "Balance: " + String.format("%.2f", balance));
+        ticket.append("<br><br>Thanks for using our system</html>");
+        MainMenu.getFrame().setTicket(ticket.toString());
+        EventQueue.invokeLater(() ->MainMenu.getFrame().changePanel(ClientView.panels.TICKET));
+    }
 
 }
