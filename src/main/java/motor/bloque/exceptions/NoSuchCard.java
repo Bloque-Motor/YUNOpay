@@ -3,7 +3,6 @@ package motor.bloque.exceptions;
 public class NoSuchCard extends Exception {
 
     public final String invalidCard;
-    private static final String MESSAGE = "The card number does not match any card in the system";
 
     public NoSuchCard(String invalidCard){
         this.invalidCard = invalidCard;
@@ -15,7 +14,7 @@ public class NoSuchCard extends Exception {
 
     @Override
     public String getMessage(){
-        return MESSAGE;
+        return "The card number " + invalidCard + "does not match any card in the system";
     }
 
 }

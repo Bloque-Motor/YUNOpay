@@ -1,4 +1,4 @@
-package motor.bloque.handlers;
+/*package motor.bloque.handlers;
 
 import motor.bloque.entities.PrepayCard;
 import motor.bloque.exceptions.*;
@@ -54,3 +54,4 @@ class PaymentTerminalTest {
         assertThrows(IncorrectPin.class, () ->PaymentTerminal.pay(tarjeta.getNumber(), 100, "0000"));
     }
 }
+*/
