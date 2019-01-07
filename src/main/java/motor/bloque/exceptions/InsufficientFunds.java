@@ -11,7 +11,7 @@ public class InsufficientFunds extends Exception {
 
     @Override
     public String getMessage(){
-        return "Insufficient funds. You need an extra " + shortBy + " euros to complete this transaction.";
+        return "Insufficient funds. You need an extra " + String.format("%.2f", shortBy) + " euros to complete this transaction.";
     }
 
 }
