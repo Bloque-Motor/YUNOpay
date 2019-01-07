@@ -17,28 +17,29 @@ import java.awt.event.ActionListener;
 
 public abstract class ConsultBalance extends AbstractAction {
     private static final Logger logger = LogManager.getLogger(ConsultBalance.class);
-    private static String cardNumber = new String();
-    private static String pin = new String();
+    private static String cardNumber;
+    private static String pin;
+
+    private static final String ERROR = "Error";
 
     public static class OkButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Ok button pressed");
             if (cardNumber.length() != 12) {
-                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect card number format", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect card number format", ERROR, JOptionPane.ERROR_MESSAGE);
             } else if (pin.length() != 4) {
-                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect PIN format", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect PIN format", ERROR, JOptionPane.ERROR_MESSAGE);
             } else {
                 try {
                     Card card = Persistence.getCard(cardNumber, pin);
-                    cardNumber = new String();
-                    pin = new String();
+                    cardNumber = null;
+                    pin = null;
                     //Unset the fields for security reasons.
                     Ticket.balance(card.getNumber(), card.getBalance(), card.getName());
                 } catch (NoSuchCard nsc) {
-                    JOptionPane.showMessageDialog(MainMenu.getFrame(), nsc.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), nsc.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                 } catch (IncorrectPin ip) {
-                    JOptionPane.showMessageDialog(MainMenu.getFrame(), ip.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), ip.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
