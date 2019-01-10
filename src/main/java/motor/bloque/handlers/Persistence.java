@@ -45,41 +45,41 @@ public class Persistence {
 
     static void loadPersistence() {
         File tmpDir = new File(DATAFILE);
-        if(tmpDir.exists()) {
-            String result = "";
-            cards = new HashMap<>();
-            try (BufferedReader br = new BufferedReader(new FileReader(DATAFILE))) {
-                StringBuilder sb = new StringBuilder();
-                String line = br.readLine();
-                while (line != null) {
-                    sb.append(line);
-                    line = br.readLine();
-                }
-                result = sb.toString();
-            } catch (Exception e) {
-                logger.error(e);
+        if (!tmpDir.exists()) return;
+        String result = "";
+        cards = new HashMap<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(DATAFILE))) {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+            while (line != null) {
+                sb.append(line);
+                line = br.readLine();
             }
+            result = sb.toString();
+        } catch (Exception e) {
+            logger.error(e);
+        }
 
-            JSONTokener tokener = new JSONTokener(result);
-            JSONObject data = new JSONObject(tokener);
-            Iterator<String> it = data.keys();
-            while (it.hasNext()) {
-                String key = it.next();
-                if (data.get(key) instanceof JSONObject) {
-                    JSONObject cardJSON = (JSONObject) data.get(key);
-                    Card card = new PrepayCard();
-                    card.setName(cardJSON.getString("name"));
-                    card.setNumber(cardJSON.getString("number"));
-                    card.setHashedPIN(cardJSON.getString("hashedPIN"));
-                    card.setSalt(cardJSON.getString("salt"));
-                    card.setBalance(cardJSON.getInt("balance"));
-                    card.setExpirationDate(LocalDateTime.parse(cardJSON.getString("Expiration Date")));
+        JSONTokener tokener = new JSONTokener(result);
+        JSONObject data = new JSONObject(tokener);
+        Iterator<String> it = data.keys();
+        while (it.hasNext()) {
+            String key = it.next();
+            if (data.get(key) instanceof JSONObject) {
+                JSONObject cardJSON = (JSONObject) data.get(key);
+                Card card = new PrepayCard();
+                card.setName(cardJSON.getString("name"));
+                card.setNumber(cardJSON.getString("number"));
+                card.setHashedPIN(cardJSON.getString("hashedPIN"));
+                card.setSalt(cardJSON.getString("salt"));
+                card.setBalance(cardJSON.getInt("balance"));
+                card.setExpirationDate(LocalDateTime.parse(cardJSON.getString("Expiration Date")));
 
-                    cards.put(card.getNumber(), card);
-                    logger.info("Card " + card.getNumber() + " recovered");
-                }
+                cards.put(card.getNumber(), card);
+                logger.info("Card " + card.getNumber() + " recovered");
             }
         }
+
     }
 
     public static void saveAll() {
