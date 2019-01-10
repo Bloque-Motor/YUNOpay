@@ -209,7 +209,7 @@ public class ClientView extends JFrame {
         GroupLayout gl = makeGL();
 
         cardNumberField = new JTextField(10);
-        confirmPinField.getDocument().addDocumentListener(new ChangePin.CardNumberReader());
+        cardNumberField.getDocument().addDocumentListener(new ChangePin.CardNumberReader());
 
         pinField = new JPasswordField(4);
         pinField.getDocument().addDocumentListener(new ChangePin.PinReader());
