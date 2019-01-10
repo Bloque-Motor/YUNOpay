@@ -17,14 +17,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class PrepayCardTest {
 
     private PrepayCard testCard;
-    private PrepayCard emptyCard;
     private String cardNumber;
     private String emptyCardNumber;
 
     @BeforeEach
     void setPrepayCard() {
         testCard = new PrepayCard("TestName", "Test Surname", "1234", 0);
-        emptyCard = new PrepayCard();
+        PrepayCard emptyCard = new PrepayCard();
         Persistence.putCard(testCard);
         Persistence.putCard(emptyCard);
         cardNumber = testCard.getNumber();
@@ -69,8 +68,6 @@ class PrepayCardTest {
         movement.setAmount(10);
         Persistence.getCard(cardNumber,"1234").setBalance(20);
         Persistence.getCard(cardNumber,"1234").addMovement(movement);
-       // System.out.println(testCard.getBalance());
-
         assertEquals(movement, Persistence.getCard(cardNumber,"1234").getMovements().get(0));
     }
 
@@ -111,7 +108,7 @@ class PrepayCardTest {
 
     @Test
     @DisplayName("PrepayCard recharge wrong pin number")
-    void recharge4() throws NegativeAmount, ExpiredCard, NoSuchCard, IncorrectPin {
+    void recharge4() throws NoSuchCard, IncorrectPin {
         assertThrows(IncorrectPin.class, () ->Persistence.getCard(cardNumber,"123").recharge(25));
         assertEquals(0, Persistence.getCard(cardNumber,"1234").getBalance());
     }
@@ -144,7 +141,7 @@ class PrepayCardTest {
 
     @Test
     @DisplayName("PrepayCard addMovement invalid card")
-    void addMovement1() throws InsufficientFunds, NegativeAmount, ExpiredCard {
+    void addMovement1() {
         Movement movement = new CardMovement(5);
         assertThrows(NullPointerException.class, () ->Persistence.getCard(emptyCardNumber,"1111").addMovement(movement));
 

@@ -1,25 +1,27 @@
 package motor.bloque.handlers;
 
-import motor.bloque.entities.CardMovement;
 import motor.bloque.entities.PrepayCard;
 import motor.bloque.exceptions.IncorrectPin;
 import motor.bloque.exceptions.NoSuchCard;
 import motor.bloque.interfaces.Card;
-import motor.bloque.interfaces.Movement;
-import org.json.JSONArray;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Persistence {
+
+    private static final Logger logger = LogManager.getLogger(Persistence.class);
 
     private static Map<String, Card> cards = new HashMap<>();
 
@@ -35,15 +37,14 @@ public class Persistence {
         cards.put(card.getNumber(), card);
     }
 
-    public static boolean existsCard(String cardNumber) {
+    static boolean existsCard(String cardNumber) {
         return cards.containsKey(cardNumber);
     }
 
-    public static void loadPersistence() {
+    static void loadPersistence() {
         String result = "";
         cards = new HashMap<>();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("data.json"));
+        try (BufferedReader br = new BufferedReader(new FileReader("data.json"))) {
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
             while (line != null) {
@@ -52,7 +53,7 @@ public class Persistence {
             }
             result = sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
         }
 
         JSONTokener tokener = new JSONTokener(result);
@@ -71,17 +72,15 @@ public class Persistence {
                 card.setExpirationDate(LocalDateTime.parse(cardJSON.getString("Expiration Date")));
 
                 cards.put(card.getNumber(), card);
-                System.out.println("Card recovered");
+                logger.info("Card recovered");
             }
         }
 
     }
 
-    public static boolean saveAll() {
+    public static void saveAll() {
         JSONObject data = new JSONObject();
-        Iterator<String> it = cards.keySet().iterator();
-        while (it.hasNext()) {
-            String key = it.next();
+        for (String key : cards.keySet()) {
             Card card = cards.get(key);
             JSONObject cardDetails = new JSONObject();
             cardDetails.put("name", card.getName());
@@ -94,7 +93,6 @@ public class Persistence {
             data.put(card.getNumber(), cardDetails);
         }
 
-        boolean result = true;
         String fileName = "data.json";
 
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName))) {
@@ -102,16 +100,14 @@ public class Persistence {
             writer.write("\n");
         } catch (Exception ex) {
             System.err.println("Couldn't write to file\n" + ex.getMessage());
-            result = false;
         }
-        return result;
     }
 
     private Persistence() {
         throw new IllegalStateException("Utility class");
     }
 
-    public static void requestCredentials(String cardNumber) {
+    static void requestCredentials(String cardNumber) {
         Card card = cards.get(cardNumber);
         Credentials.setPin(card.getHashedPIN());
         Credentials.setSalt(card.getSalt());

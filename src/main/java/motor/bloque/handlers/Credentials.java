@@ -1,7 +1,5 @@
 package motor.bloque.handlers;
 
-import motor.bloque.exceptions.NoSuchCard;
-import motor.bloque.interfaces.Card;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,13 +33,13 @@ public class Credentials {
         }
     }
 
-    public static boolean validatePassword(String password, String cardNumber) throws NoSuchCard {
+    static boolean validatePassword(String password, String cardNumber) {
         Persistence.requestCredentials(cardNumber);
         String toValidate = getSecurePassword(password, hexStringToByteArray(salt));
         boolean validated = false;
         if (toValidate != null) validated = toValidate.equals(hashedPin);
-        salt = new String();
-        hashedPin = new String();
+        salt = "";
+        hashedPin = "";
         return validated;
     }
 
@@ -56,7 +54,7 @@ public class Credentials {
         return cardNumber;
     }
 
-    public static void setSalt(String salt){
+    static void setSalt(String salt) {
         Credentials.salt = salt;
     }
 
