@@ -80,8 +80,8 @@ public class Persistence {
 
     public static void saveAll() {
         JSONObject data = new JSONObject();
-        for (String key : cards.keySet()) {
-            Card card = cards.get(key);
+        for (Map.Entry entry : cards.entrySet()) {
+            Card card = (Card) entry.getValue();
             JSONObject cardDetails = new JSONObject();
             cardDetails.put("name", card.getName());
             cardDetails.put("number", card.getNumber());
@@ -99,7 +99,7 @@ public class Persistence {
             data.write(writer, 4, 0);
             writer.write("\n");
         } catch (Exception ex) {
-            System.err.println("Couldn't write to file\n" + ex.getMessage());
+            logger.error(ex.getMessage(), ex);
         }
     }
 

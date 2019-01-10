@@ -8,10 +8,6 @@ public class NoSuchCard extends Exception {
         this.invalidCard = invalidCard;
     }
 
-    /*public String getInvalidCard(){
-        return invalidCard;
-    }*/
-
     @Override
     public String getMessage(){
         return "The card number " + invalidCard + "does not match any card in the system";
