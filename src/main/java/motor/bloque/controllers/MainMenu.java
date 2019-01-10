@@ -10,8 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-//TODO: This class must handle all operations for the elements on the views.
-
 public abstract class MainMenu extends AbstractAction {
 
     private static ClientView clientView;
@@ -24,11 +22,7 @@ public abstract class MainMenu extends AbstractAction {
             frame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
-                    //if(JOptionPane.showConfirmDialog(frame, "Are you sure ?") == JOptionPane.OK_OPTION){
-                    frame.setVisible(false);
                     new MainMenu.QuitButton().actionPerformed(null);
-                    frame.dispose();
-                    //}
                 }
             });
             frame.setVisible(true);
@@ -46,7 +40,6 @@ public abstract class MainMenu extends AbstractAction {
     public static class NewCardButton implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e){
-            System.out.println("New card button pressed");
             EventQueue.invokeLater(() ->clientView.changePanel(ClientView.panels.NEWCARD));
 
         }
@@ -55,7 +48,6 @@ public abstract class MainMenu extends AbstractAction {
     public static class PayButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Pay button pressed");
             EventQueue.invokeLater(() ->clientView.changePanel(ClientView.panels.PAY));
         }
     }
@@ -63,7 +55,6 @@ public abstract class MainMenu extends AbstractAction {
     public static class RechargeMoneyButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Recharge money button pressed");
             EventQueue.invokeLater(() ->clientView.changePanel(ClientView.panels.RECHARGE));
         }
     }
@@ -71,7 +62,6 @@ public abstract class MainMenu extends AbstractAction {
     public static class ChangePinButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Change PIN button pressed");
             EventQueue.invokeLater(() ->clientView.changePanel(ClientView.panels.CHANGEPIN));
         }
     }
@@ -79,7 +69,6 @@ public abstract class MainMenu extends AbstractAction {
     public static class ConsultBalanceButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Consult balance button pressed");
             EventQueue.invokeLater(() ->clientView.changePanel(ClientView.panels.CHECKBALANCE));
         }
     }
@@ -87,7 +76,6 @@ public abstract class MainMenu extends AbstractAction {
     public static class ConsultMovementsButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Consult movements button pressed");
             EventQueue.invokeLater(() ->clientView.changePanel(ClientView.panels.CHECKMOVES));
         }
     }
@@ -103,8 +91,11 @@ public abstract class MainMenu extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Quit button pressed");
-            Persistence.saveAll();
+            if(JOptionPane.showConfirmDialog(clientView, "Are you sure ?") == JOptionPane.OK_OPTION){
+                clientView.setVisible(false);
+                Persistence.saveAll();
+                clientView.dispose();
+            }
             System.exit(0);
         }
     }

@@ -14,6 +14,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 public abstract class Pay extends AbstractAction {
     private static String pin;
@@ -35,14 +36,17 @@ public abstract class Pay extends AbstractAction {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "Amount field cannot be empty");
             }else{
                 try {
-                    double amount = Double.parseDouble(Pay.amount);
+                    DecimalFormat decformat = new DecimalFormat("#.00");
+                    double parsedAmount = Double.parseDouble(decformat.format(Double.parseDouble(Pay.amount)));
                     Card card = Persistence.getCard(cardNumber, pin);
-                    card.addMovement(new CardMovement(amount));
+                    card.addMovement(new CardMovement(parsedAmount));
                     cardNumber = null;
                     pin = null;
                     Pay.amount = null;
                     //Unset the fields for security reasons.
-                    Ticket.pay(card.getNumber(), card.getBalance(), card.getName(), amount);
+                    Ticket.pay(card.getNumber(), card.getBalance(), card.getName(), parsedAmount);
+                }catch (IllegalArgumentException iae){
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), "Amount field format is incorrect. Amounts should use a period and a maximum of 2 decimal spaces", ERROR, JOptionPane.ERROR_MESSAGE);
                 } catch (NoSuchCard nsc) {
                     JOptionPane.showMessageDialog(MainMenu.getFrame(), nsc.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                 } catch (IncorrectPin ip) {
