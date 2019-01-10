@@ -43,7 +43,7 @@ public abstract class Ticket extends AbstractAction {
         for(Movement move : movements){
             LocalDateTime date = move.getDate();
             ticket.append("<br>" + date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear()%100);
-            ticket.append("<&nbsp> &euro;" + String.format("%.2f", move.getAmount()));
+            ticket.append("&nbsp;&nbsp;&nbsp;&nbsp; &euro;" + String.format("%.2f", move.getAmount()));
         }
         ticket.append(BYE);
         MainMenu.getFrame().setTicket(ticket.toString());

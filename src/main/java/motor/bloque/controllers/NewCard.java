@@ -55,6 +55,7 @@ public abstract class NewCard extends AbstractAction {
                     Ticket.newCard(newCard.getNumber(), newCard.getName(), newCard.getBalance());
                 } catch (IllegalArgumentException iae) {
                     JOptionPane.showMessageDialog(MainMenu.getFrame(), "Amount field format is incorrect. Amounts should use a period and a maximum of 2 decimal spaces", ERROR, JOptionPane.ERROR_MESSAGE);
+                    logger.error(iae);
                 }
             }
         }
@@ -82,7 +83,7 @@ public abstract class NewCard extends AbstractAction {
             try {
                 NewCard.name = doc.getText(0, len);
             } catch (BadLocationException ex) {
-                logger.warn(BL, ex);
+                logger.error(ex);
             }
         }
 
@@ -111,7 +112,7 @@ public abstract class NewCard extends AbstractAction {
             try {
                 NewCard.surname = doc.getText(0, len);
             } catch (BadLocationException ex) {
-                logger.warn(BL, ex);
+                logger.error(ex);
             }
         }
 
@@ -140,7 +141,7 @@ public abstract class NewCard extends AbstractAction {
             try {
                 NewCard.pin = doc.getText(0, len);
             } catch (BadLocationException ex) {
-                logger.warn(BL, ex);
+                logger.error(ex);
             }
         }
 
@@ -169,7 +170,7 @@ public abstract class NewCard extends AbstractAction {
             try {
                 NewCard.confirmPin = doc.getText(0, len);
             } catch (BadLocationException ex) {
-                logger.warn(BL, ex);
+                logger.error(ex);
             }
         }
     }
@@ -197,7 +198,7 @@ public abstract class NewCard extends AbstractAction {
             try {
                 NewCard.initialAmount = doc.getText(0, len);
             } catch (BadLocationException ex) {
-                logger.warn(BL, ex);
+                logger.error(ex);
             }
         }
 
