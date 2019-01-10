@@ -72,7 +72,7 @@ public class Persistence {
                 card.setExpirationDate(LocalDateTime.parse(cardJSON.getString("Expiration Date")));
 
                 cards.put(card.getNumber(), card);
-                logger.info("Card recovered");
+                logger.info("Card " + card.getNumber() + " recovered");
             }
         }
 
@@ -98,6 +98,7 @@ public class Persistence {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName))) {
             data.write(writer, 4, 0);
             writer.write("\n");
+            logger.info("Card file updated successfully");
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }
