@@ -1,8 +1,8 @@
 package motor.bloque.controllers;
 
-import org.apache.commons.lang3.StringUtils;
 import motor.bloque.entities.PrepayCard;
 import motor.bloque.handlers.Persistence;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,8 +14,7 @@ import javax.swing.text.Document;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
+import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 public abstract class NewCard extends AbstractAction {
@@ -43,11 +42,8 @@ public abstract class NewCard extends AbstractAction {
             } else {
                 logger.info("Ok button pressed");
                 try {
-                    NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
-                    Number number = format.parse(initialAmount);
-                    double d = number.doubleValue();
-                    DecimalFormat decformat = new DecimalFormat("#.00");
-                    double parsedAmount = Double.parseDouble(decformat.format(d));
+                    DecimalFormat decformat = new DecimalFormat("#.00", DecimalFormatSymbols.getInstance(Locale.US));
+                    double parsedAmount = Double.parseDouble(decformat.format(Double.parseDouble(NewCard.initialAmount)));
                     logger.info("Attempting to create new card with the following data: " + name + " " + surname + " " + " " + initialAmount);
                     PrepayCard newCard = new PrepayCard(name, surname, pin, parsedAmount);
                     Persistence.putCard(newCard);
@@ -59,8 +55,6 @@ public abstract class NewCard extends AbstractAction {
                     Ticket.newCard(newCard.getNumber(), newCard.getName(), newCard.getBalance());
                 } catch (IllegalArgumentException iae) {
                     JOptionPane.showMessageDialog(MainMenu.getFrame(), "Amount field format is incorrect. Amounts should use a period and a maximum of 2 decimal spaces", ERROR, JOptionPane.ERROR_MESSAGE);
-                } catch (ParseException pe) {
-                    pe.printStackTrace();
                 }
             }
         }
