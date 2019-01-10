@@ -1,7 +1,9 @@
 package motor.bloque.controllers;
 
-import motor.bloque.entities.CardMovement;
-import motor.bloque.exceptions.*;
+import motor.bloque.exceptions.ExpiredCard;
+import motor.bloque.exceptions.IncorrectPin;
+import motor.bloque.exceptions.NegativeAmount;
+import motor.bloque.exceptions.NoSuchCard;
 import motor.bloque.handlers.Persistence;
 import motor.bloque.interfaces.Card;
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +16,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 public abstract class Recharge extends AbstractAction {
     private static String pin;
@@ -35,14 +38,17 @@ public abstract class Recharge extends AbstractAction {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "Amount field cannot be empty");
             }else{
                 try {
-                    double amount = Double.parseDouble(Recharge.amount);
+                    DecimalFormat decformat = new DecimalFormat("#.00");
+                    double parsedAmount = Double.parseDouble(decformat.format(Double.parseDouble(Recharge.amount)));
                     Card card = Persistence.getCard(cardNumber, pin);
-                    card.recharge(amount);
+                    card.recharge(parsedAmount);
                     cardNumber = null;
                     pin = null;
                     Recharge.amount = null;
                     //Unset the fields for security reasons.
-                    Ticket.pay(card.getNumber(), card.getBalance(), card.getName(), amount);
+                    Ticket.pay(card.getNumber(), card.getBalance(), card.getName(), parsedAmount);
+                } catch (IllegalArgumentException iae) {
+                    JOptionPane.showMessageDialog(MainMenu.getFrame(), "Amount field format is incorrect. Amounts should use a period and a maximum of 2 decimal spaces", ERROR, JOptionPane.ERROR_MESSAGE);
                 } catch (NoSuchCard nsc) {
                     JOptionPane.showMessageDialog(MainMenu.getFrame(), nsc.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                 } catch (IncorrectPin ip) {
