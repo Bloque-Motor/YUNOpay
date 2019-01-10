@@ -2,15 +2,15 @@ package motor.bloque.exceptions;
 
 public class NoSuchCard extends Exception {
 
-    public final String invalidCard;
+    private final String invalidCard;
 
     public NoSuchCard(String invalidCard){
         this.invalidCard = invalidCard;
     }
 
-    public String getInvalidCard(){
+    /*public String getInvalidCard(){
         return invalidCard;
-    }
+    }*/
 
     @Override
     public String getMessage(){
