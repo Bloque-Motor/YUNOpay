@@ -1,18 +1,21 @@
 package motor.bloque.controllers;
 
-        import motor.bloque.entities.PrepayCard;
-        import motor.bloque.handlers.Persistence;
-        import org.apache.logging.log4j.LogManager;
-        import org.apache.logging.log4j.Logger;
+import motor.bloque.entities.PrepayCard;
+import motor.bloque.handlers.Persistence;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-        import javax.swing.*;
-        import javax.swing.event.DocumentEvent;
-        import javax.swing.event.DocumentListener;
-        import javax.swing.text.BadLocationException;
-        import javax.swing.text.Document;
-        import java.awt.event.ActionEvent;
-        import java.awt.event.ActionListener;
-        import java.text.DecimalFormat;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 public abstract class NewCard extends AbstractAction {
     private static final Logger logger = LogManager.getLogger(NewCard.class);
@@ -32,14 +35,14 @@ public abstract class NewCard extends AbstractAction {
             if (name.isEmpty() || surname.isEmpty() || pin.isEmpty() || confirmPin.isEmpty()) {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "Fields cannot be empty", ERROR, JOptionPane.ERROR_MESSAGE);
                 logger.error("Some fields are empty");
-            } else if (pin.length() != 4) {
+            } else if ((pin.length() != 4) || !StringUtils.isNumeric(pin)) {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect PIN format", ERROR, JOptionPane.ERROR_MESSAGE);
             } else if (!pin.equals(confirmPin)) {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "PINs don't match", ERROR, JOptionPane.ERROR_MESSAGE);
             } else {
                 logger.info("Ok button pressed");
                 try {
-                    DecimalFormat decformat = new DecimalFormat("#.00");
+                    DecimalFormat decformat = new DecimalFormat("#.00", DecimalFormatSymbols.getInstance(Locale.US));
                     double parsedAmount = Double.parseDouble(decformat.format(Double.parseDouble(NewCard.initialAmount)));
                     logger.info("Attempting to create new card with the following data: " + name + " " + surname + " " + " " + initialAmount);
                     PrepayCard newCard = new PrepayCard(name, surname, pin, parsedAmount);
@@ -52,6 +55,7 @@ public abstract class NewCard extends AbstractAction {
                     Ticket.newCard(newCard.getNumber(), newCard.getName(), newCard.getBalance());
                 } catch (IllegalArgumentException iae) {
                     JOptionPane.showMessageDialog(MainMenu.getFrame(), "Amount field format is incorrect. Amounts should use a period and a maximum of 2 decimal spaces", ERROR, JOptionPane.ERROR_MESSAGE);
+                    logger.error(iae);
                 }
             }
         }
@@ -79,7 +83,7 @@ public abstract class NewCard extends AbstractAction {
             try {
                 NewCard.name = doc.getText(0, len);
             } catch (BadLocationException ex) {
-                logger.warn(BL, ex);
+                logger.error(ex);
             }
         }
 
@@ -108,7 +112,7 @@ public abstract class NewCard extends AbstractAction {
             try {
                 NewCard.surname = doc.getText(0, len);
             } catch (BadLocationException ex) {
-                logger.warn(BL, ex);
+                logger.error(ex);
             }
         }
 
@@ -137,7 +141,7 @@ public abstract class NewCard extends AbstractAction {
             try {
                 NewCard.pin = doc.getText(0, len);
             } catch (BadLocationException ex) {
-                logger.warn(BL, ex);
+                logger.error(ex);
             }
         }
 
@@ -166,7 +170,7 @@ public abstract class NewCard extends AbstractAction {
             try {
                 NewCard.confirmPin = doc.getText(0, len);
             } catch (BadLocationException ex) {
-                logger.warn(BL, ex);
+                logger.error(ex);
             }
         }
     }
@@ -194,7 +198,7 @@ public abstract class NewCard extends AbstractAction {
             try {
                 NewCard.initialAmount = doc.getText(0, len);
             } catch (BadLocationException ex) {
-                logger.warn(BL, ex);
+                logger.error(ex);
             }
         }
 

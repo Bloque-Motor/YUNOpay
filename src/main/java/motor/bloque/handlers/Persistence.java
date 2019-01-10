@@ -11,6 +11,7 @@ import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class Persistence {
 
     private static final Logger logger = LogManager.getLogger(Persistence.class);
+    private static final String DATAFILE = "data.json";
 
     private static Map<String, Card> cards = new HashMap<>();
 
@@ -42,9 +44,11 @@ public class Persistence {
     }
 
     static void loadPersistence() {
+        File tmpDir = new File(DATAFILE);
+        if (!tmpDir.exists()) return;
         String result = "";
         cards = new HashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("data.json"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(DATAFILE))) {
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
             while (line != null) {
@@ -72,7 +76,7 @@ public class Persistence {
                 card.setExpirationDate(LocalDateTime.parse(cardJSON.getString("Expiration Date")));
 
                 cards.put(card.getNumber(), card);
-                logger.info("Card recovered");
+                logger.info("Card " + card.getNumber() + " recovered");
             }
         }
 
@@ -93,11 +97,10 @@ public class Persistence {
             data.put(card.getNumber(), cardDetails);
         }
 
-        String fileName = "data.json";
-
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName))) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(DATAFILE))) {
             data.write(writer, 4, 0);
             writer.write("\n");
+            logger.info("Card file updated successfully");
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }

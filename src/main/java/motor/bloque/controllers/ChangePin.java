@@ -4,6 +4,7 @@ import motor.bloque.exceptions.IncorrectPin;
 import motor.bloque.exceptions.NoSuchCard;
 import motor.bloque.handlers.Persistence;
 import motor.bloque.interfaces.Card;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,9 +36,9 @@ public abstract class ChangePin extends AbstractAction {
                 logger.error("Some fields are empty");
             }else if (cardNumber.length() != 12) {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect card number format", ERROR, JOptionPane.ERROR_MESSAGE);
-            } else if (pin.length() != 4) {
+            } else if (newPin.length() != 4 || !StringUtils.isNumeric(newPin)) {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect PIN format", ERROR, JOptionPane.ERROR_MESSAGE);
-            }else if (!pin.equals(confirmPin)){
+            }else if (!newPin.equals(confirmPin)){
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "PINs don't match", ERROR, JOptionPane.ERROR_MESSAGE);
             }else{
                 try {
