@@ -11,6 +11,7 @@ import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class Persistence {
 
     private static final Logger logger = LogManager.getLogger(Persistence.class);
+    private static final String DATAFILE = "data.json";
 
     private static Map<String, Card> cards = new HashMap<>();
 
@@ -42,40 +44,42 @@ public class Persistence {
     }
 
     static void loadPersistence() {
-        String result = "";
-        cards = new HashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("data.json"))) {
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
-            while (line != null) {
-                sb.append(line);
-                line = br.readLine();
+        File tmpDir = new File(DATAFILE);
+        if(tmpDir.exists()) {
+            String result = "";
+            cards = new HashMap<>();
+            try (BufferedReader br = new BufferedReader(new FileReader(DATAFILE))) {
+                StringBuilder sb = new StringBuilder();
+                String line = br.readLine();
+                while (line != null) {
+                    sb.append(line);
+                    line = br.readLine();
+                }
+                result = sb.toString();
+            } catch (Exception e) {
+                logger.error(e);
             }
-            result = sb.toString();
-        } catch (Exception e) {
-            logger.error(e);
-        }
 
-        JSONTokener tokener = new JSONTokener(result);
-        JSONObject data = new JSONObject(tokener);
-        Iterator<String> it = data.keys();
-        while (it.hasNext()) {
-            String key = it.next();
-            if (data.get(key) instanceof JSONObject) {
-                JSONObject cardJSON = (JSONObject) data.get(key);
-                Card card = new PrepayCard();
-                card.setName(cardJSON.getString("name"));
-                card.setNumber(cardJSON.getString("number"));
-                card.setHashedPIN(cardJSON.getString("hashedPIN"));
-                card.setSalt(cardJSON.getString("salt"));
-                card.setBalance(cardJSON.getInt("balance"));
-                card.setExpirationDate(LocalDateTime.parse(cardJSON.getString("Expiration Date")));
+            JSONTokener tokener = new JSONTokener(result);
+            JSONObject data = new JSONObject(tokener);
+            Iterator<String> it = data.keys();
+            while (it.hasNext()) {
+                String key = it.next();
+                if (data.get(key) instanceof JSONObject) {
+                    JSONObject cardJSON = (JSONObject) data.get(key);
+                    Card card = new PrepayCard();
+                    card.setName(cardJSON.getString("name"));
+                    card.setNumber(cardJSON.getString("number"));
+                    card.setHashedPIN(cardJSON.getString("hashedPIN"));
+                    card.setSalt(cardJSON.getString("salt"));
+                    card.setBalance(cardJSON.getInt("balance"));
+                    card.setExpirationDate(LocalDateTime.parse(cardJSON.getString("Expiration Date")));
 
-                cards.put(card.getNumber(), card);
-                logger.info("Card " + card.getNumber() + " recovered");
+                    cards.put(card.getNumber(), card);
+                    logger.info("Card " + card.getNumber() + " recovered");
+                }
             }
         }
-
     }
 
     public static void saveAll() {
@@ -93,9 +97,7 @@ public class Persistence {
             data.put(card.getNumber(), cardDetails);
         }
 
-        String fileName = "data.json";
-
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName))) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(DATAFILE))) {
             data.write(writer, 4, 0);
             writer.write("\n");
             logger.info("Card file updated successfully");
