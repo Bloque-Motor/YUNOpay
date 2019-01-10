@@ -1,18 +1,19 @@
 package motor.bloque.controllers;
 
-        import motor.bloque.entities.PrepayCard;
-        import motor.bloque.handlers.Persistence;
-        import org.apache.logging.log4j.LogManager;
-        import org.apache.logging.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
+import motor.bloque.entities.PrepayCard;
+import motor.bloque.handlers.Persistence;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-        import javax.swing.*;
-        import javax.swing.event.DocumentEvent;
-        import javax.swing.event.DocumentListener;
-        import javax.swing.text.BadLocationException;
-        import javax.swing.text.Document;
-        import java.awt.event.ActionEvent;
-        import java.awt.event.ActionListener;
-        import java.text.DecimalFormat;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
 public abstract class NewCard extends AbstractAction {
     private static final Logger logger = LogManager.getLogger(NewCard.class);
@@ -32,7 +33,7 @@ public abstract class NewCard extends AbstractAction {
             if (name.isEmpty() || surname.isEmpty() || pin.isEmpty() || confirmPin.isEmpty()) {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "Fields cannot be empty", ERROR, JOptionPane.ERROR_MESSAGE);
                 logger.error("Some fields are empty");
-            } else if (pin.length() != 4) {
+            } else if ((pin.length() != 4) || !StringUtils.isNumeric(pin)) {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect PIN format", ERROR, JOptionPane.ERROR_MESSAGE);
             } else if (!pin.equals(confirmPin)) {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "PINs don't match", ERROR, JOptionPane.ERROR_MESSAGE);
