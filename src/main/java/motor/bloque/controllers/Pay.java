@@ -15,6 +15,8 @@ import javax.swing.text.Document;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 public abstract class Pay extends AbstractAction {
     private static String pin;
@@ -36,7 +38,7 @@ public abstract class Pay extends AbstractAction {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "Amount field cannot be empty");
             }else{
                 try {
-                    DecimalFormat decformat = new DecimalFormat("#.00");
+                    DecimalFormat decformat = new DecimalFormat("#.00", DecimalFormatSymbols.getInstance(Locale.US));
                     double parsedAmount = Double.parseDouble(decformat.format(Double.parseDouble(Pay.amount)));
                     Card card = Persistence.getCard(cardNumber, pin);
                     card.addMovement(new CardMovement(parsedAmount));
