@@ -41,6 +41,7 @@ public abstract class ConsultBalance extends AbstractAction {
                         JOptionPane.showMessageDialog(MainMenu.getFrame(), nsc.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                     } catch (IncorrectPin ip) {
                         JOptionPane.showMessageDialog(MainMenu.getFrame(), ip.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
+                        logger.warn("Authentication error for card " + cardNumber);
                     }
                 }
             }
