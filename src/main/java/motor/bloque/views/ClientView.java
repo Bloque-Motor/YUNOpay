@@ -3,9 +3,7 @@ package motor.bloque.views;
 import motor.bloque.controllers.*;
 
 import javax.swing.*;
-
 import java.awt.*;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
