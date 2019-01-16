@@ -452,9 +452,9 @@ public class ClientView extends JFrame {
         if (surnameField.getText() != null)  map.put(formField.SURNAME, surnameField.getText());
         if (cardNumberField.getText() != null)  map.put(formField.CARDNUMBER, cardNumberField.getText());
         if (amountField.getText() != null)  map.put(formField.AMOUNT, amountField.getText());
-        if (newPinField.getPassword() != null)  map.put(formField.NEWPIN, Arrays.toString(newPinField.getPassword()));
-        if (pinField.getPassword() != null)  map.put(formField.PIN, Arrays.toString(pinField.getPassword()));
-        if (confirmPinField.getPassword() != null)  map.put(formField.CONFIRMPIN, Arrays.toString(confirmPinField.getPassword()));
+        if (newPinField.getPassword() != null)  map.put(formField.NEWPIN, new String(newPinField.getPassword()));
+        if (pinField.getPassword() != null)  map.put(formField.PIN, new String(pinField.getPassword()));
+        if (confirmPinField.getPassword() != null)  map.put(formField.CONFIRMPIN, new String(confirmPinField.getPassword()));
         return map;
     }
 
