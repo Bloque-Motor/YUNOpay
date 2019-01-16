@@ -3,6 +3,7 @@ package motor.bloque.handlers;
 import motor.bloque.entities.PrepayCard;
 import motor.bloque.exceptions.IncorrectPin;
 import motor.bloque.exceptions.NoSuchCard;
+import motor.bloque.interfaces.Card;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,16 +59,17 @@ class PersistenceTest {
     }
 
     //Esto lanza un nullpointer cuando se ejecuta desde terminal
-    /*@Test
+    @Test
     void loadPersistence() throws NoSuchCard, IncorrectPin {
         Persistence.putCard(testCard);
+        cardNumber = testCard.getNumber();
         Persistence.saveAll();
         Persistence.loadPersistence();
-        PrepayCard res = Persistence.getCard(cardNumber, "1234");
+        Card res = Persistence.getCard(cardNumber, "1234");
         assertEquals(testCard.getName(), res.getName());
         assertEquals(testCard.getBalance(), res.getBalance());
         assertEquals(testCard.getExpirationDate(), res.getExpirationDate());
-    }*/
+    }
 
     @Test
     void saveAll() {
