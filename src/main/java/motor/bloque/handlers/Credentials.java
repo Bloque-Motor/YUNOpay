@@ -21,6 +21,7 @@ public class Credentials {
 
     public static Map<HASHED, String> hashNewPassword(String passwordToHash) {
         byte[] salt = getSalt();
+        if(salt == null) return null;
         String securePassword = getSecurePassword(passwordToHash, salt);
         Map<HASHED, String> map = new EnumMap(HASHED.class);
         map.put(HASHED.PASSWORD, securePassword);
