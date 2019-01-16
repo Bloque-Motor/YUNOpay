@@ -5,6 +5,7 @@ import motor.bloque.controllers.*;
 import javax.swing.*;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -126,21 +127,11 @@ public class ClientView extends JFrame {
 
     private void newCard() {
         GroupLayout gl = makeGL();
-
-        nameField = new JTextField(10);
-        surnameField = new JTextField(10);
-        pinField = new JPasswordField(4);
-        confirmPinField = new JPasswordField(4);
-        amountField = new JTextField(10);
-
-
-
+        resetFields();
         JButton okButton = new JButton("OK");
         okButton.setToolTipText(OKTT);
         okButton.addActionListener(new NewCard.OkButton());
-
         setTitle("New card");
-
         gl.setAutoCreateGaps(true);
         gl.setAutoCreateContainerGaps(true);
 
@@ -204,13 +195,7 @@ public class ClientView extends JFrame {
 
     private void changePin() {
         GroupLayout gl = makeGL();
-
-        cardNumberField = new JTextField(10);
-        pinField = new JPasswordField(4);
-        newPinField = new JPasswordField(4);
-        confirmPinField = new JPasswordField(4);
-
-
+        resetFields();
         JButton okButton = new JButton("OK");
         okButton.setToolTipText(OKTT);
         okButton.addActionListener(new ChangePin.OkButton());
@@ -271,8 +256,7 @@ public class ClientView extends JFrame {
     private void makeCardPinPanel(panels pane) {
         GroupLayout gl = makeGL();
 
-        cardNumberField = new JTextField(10);
-        pinField = new JPasswordField(4);
+        resetFields();
 
         JButton okButton = new JButton("OK");
         okButton.setToolTipText(OKTT);
@@ -323,9 +307,7 @@ public class ClientView extends JFrame {
     private void makeCardPinAmountPanel(panels pane) {
         GroupLayout gl = makeGL();
 
-        cardNumberField = new JTextField(10);
-        pinField = new JPasswordField(4);
-        amountField = new JTextField(10);
+        resetFields();
 
         JButton okButton = new JButton("OK");
         okButton.setToolTipText(OKTT);
@@ -454,15 +436,25 @@ public class ClientView extends JFrame {
         update(getGraphics());
     }
 
+    private void resetFields(){
+        cardNumberField = new JTextField(10);
+        pinField = new JPasswordField(4);
+        amountField = new JTextField(10);
+        newPinField = new JPasswordField(4);
+        confirmPinField = new JPasswordField(4);
+        nameField = new JTextField(10);
+        surnameField = new JTextField(10);
+    }
+
     public Map<formField, String> getFormData(){
         EnumMap<formField, String> map = new EnumMap<>(formField.class);
         if (nameField.getText() != null)  map.put(formField.NAME, nameField.getText());
         if (surnameField.getText() != null)  map.put(formField.SURNAME, surnameField.getText());
         if (cardNumberField.getText() != null)  map.put(formField.CARDNUMBER, cardNumberField.getText());
         if (amountField.getText() != null)  map.put(formField.AMOUNT, amountField.getText());
-        if (newPinField.getPassword() != null)  map.put(formField.NEWPIN, newPinField.getPassword().toString());
-        if (pinField.getPassword() != null)  map.put(formField.PIN, pinField.getPassword().toString());
-        if (confirmPinField.getPassword() != null)  map.put(formField.CONFIRMPIN, confirmPinField.getPassword().toString());
+        if (newPinField.getPassword() != null)  map.put(formField.NEWPIN, Arrays.toString(newPinField.getPassword()));
+        if (pinField.getPassword() != null)  map.put(formField.PIN, Arrays.toString(pinField.getPassword()));
+        if (confirmPinField.getPassword() != null)  map.put(formField.CONFIRMPIN, Arrays.toString(confirmPinField.getPassword()));
         return map;
     }
 
