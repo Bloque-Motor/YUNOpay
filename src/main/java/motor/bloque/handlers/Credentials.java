@@ -20,17 +20,13 @@ public class Credentials {
     private static String hashedPin;
 
     public static Map<HASHED, String> hashNewPassword(String passwordToHash) {
-        try {
-            byte[] salt = getSalt();
-            String securePassword = getSecurePassword(passwordToHash, salt);
-            Map<HASHED, String> map = new EnumMap(HASHED.class);
-            map.put(HASHED.PASSWORD, securePassword);
-            map.put(HASHED.SALT, bytesToHex(salt));
-            return map;
-        } catch (NoSuchAlgorithmException e) {
-            logger.error(e);
-            return null;
-        }
+        byte[] salt = getSalt();
+        if(salt == null) return null;
+        String securePassword = getSecurePassword(passwordToHash, salt);
+        Map<HASHED, String> map = new EnumMap(HASHED.class);
+        map.put(HASHED.PASSWORD, securePassword);
+        map.put(HASHED.SALT, bytesToHex(salt));
+        return map;
     }
 
     static boolean validatePassword(String password, String cardNumber) {
@@ -95,10 +91,16 @@ public class Credentials {
         return bytesToHex(generatedPassword);
     }
 
-    private static byte[] getSalt() throws NoSuchAlgorithmException {
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-        byte[] salt = new byte[16];
-        sr.nextBytes(salt);
+    private static byte[] getSalt(){
+        byte[] salt = null;
+        try{
+            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+            salt = new byte[16];
+            sr.nextBytes(salt);
+
+        } catch (NoSuchAlgorithmException nsa){
+            logger.error(nsa);
+        }
         return salt;
     }
 
