@@ -6,48 +6,48 @@ import motor.bloque.exceptions.NegativeAmount;
 import motor.bloque.exceptions.NoSuchCard;
 import motor.bloque.handlers.Persistence;
 import motor.bloque.interfaces.Card;
+import motor.bloque.views.ClientView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import java.util.Map;
 
 public abstract class Recharge extends AbstractAction {
-    private static String pin;
-    private static String cardNumber;
-    private static String amount;
+
     private static final String ERROR = "Error";
     private static final String BL = "Bad Location";
-
     private static final Logger logger = LogManager.getLogger(Recharge.class);
 
     public static class OkButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            Map<ClientView.formField, String> map = MainMenu.getFrame().getFormData();
+            String cardNumber = null;
+            String pin = null;
+            String amount = null;
+            if (!(map.containsKey(ClientView.formField.CARDNUMBER) && map.containsKey(ClientView.formField.PIN) && map.containsKey(ClientView.formField.AMOUNT))) {
+                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Fields cannot be empty", ERROR, JOptionPane.ERROR_MESSAGE);
+            } else {
+                pin = map.get(ClientView.formField.PIN);
+                cardNumber = map.get(ClientView.formField.CARDNUMBER);
+                amount = map.get(ClientView.formField.AMOUNT);
+            }
             if (cardNumber.length() != 12) {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect card number format", ERROR, JOptionPane.ERROR_MESSAGE);
             } else if (pin.length() != 4) {
                 JOptionPane.showMessageDialog(MainMenu.getFrame(), "Incorrect PIN format", ERROR, JOptionPane.ERROR_MESSAGE);
-            } else if (amount.isEmpty()) {
-                JOptionPane.showMessageDialog(MainMenu.getFrame(), "Amount field cannot be empty");
-            }else{
+            } else {
                 try {
                     DecimalFormat decformat = new DecimalFormat("#.00", DecimalFormatSymbols.getInstance(Locale.US));
-                    double parsedAmount = Double.parseDouble(decformat.format(Double.parseDouble(Recharge.amount)));
+                    double parsedAmount = Double.parseDouble(decformat.format(Double.parseDouble(amount)));
                     Card card = Persistence.getCard(cardNumber, pin);
                     card.recharge(parsedAmount);
-                    cardNumber = null;
-                    pin = null;
-                    Recharge.amount = null;
-                    //Unset the fields for security reasons.
                     Ticket.pay(card.getNumber(), card.getBalance(), card.getName(), parsedAmount);
                 } catch (IllegalArgumentException iae) {
                     JOptionPane.showMessageDialog(MainMenu.getFrame(), "Amount field format is incorrect. Amounts should use a period and a maximum of 2 decimal spaces", ERROR, JOptionPane.ERROR_MESSAGE);
@@ -64,84 +64,4 @@ public abstract class Recharge extends AbstractAction {
         }
     }
 
-    public static class CardNumberReader implements DocumentListener {
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            updateCardNumber(e);
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            updateCardNumber(e);
-        }
-
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            //Do nothing. Never triggered by plain text documents but required by interface.
-        }
-
-        private void updateCardNumber(DocumentEvent e){
-            Document doc = e.getDocument();
-            int len = doc.getLength();
-            try{
-                Recharge.cardNumber = doc.getText(0, len);
-            }catch (BadLocationException ex){
-                logger.warn(BL, ex);
-            }
-        }
-    }
-
-    public static class PinReader implements DocumentListener {
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            updatePin(e);
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            updatePin(e);
-        }
-
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            //Do nothing. Never triggered by plain text documents but required by interface.
-        }
-
-        private void updatePin(DocumentEvent e){
-            Document doc = e.getDocument();
-            int len = doc.getLength();
-            try{
-                Recharge.pin = doc.getText(0, len);
-            }catch (BadLocationException ex){
-                logger.warn(BL, ex);
-            }
-        }
-    }
-
-    public static class AmountReader implements DocumentListener {
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            updateAmount(e);
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            updateAmount(e);
-        }
-
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            //Do nothing. Never triggered by plain text documents but required by interface.
-        }
-
-        private void updateAmount(DocumentEvent e){
-            Document doc = e.getDocument();
-            int len = doc.getLength();
-            try{
-                Recharge.amount = doc.getText(0, len);
-            }catch (BadLocationException ex){
-                logger.warn(BL, ex);
-            }
-        }
-    }
 }
