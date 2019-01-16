@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class PersistenceTest {
 
     private PrepayCard testCard;
@@ -62,7 +63,7 @@ class PersistenceTest {
         Persistence.putCard(testCard);
         Persistence.saveAll();
         Persistence.loadPersistence();
-        Card res = Persistence.getCard(cardNumber, "1234");
+        PrepayCard res = Persistence.getCard(cardNumber, "1234");
         assertEquals(testCard.getName(), res.getName());
         assertEquals(testCard.getBalance(), res.getBalance());
         assertEquals(testCard.getExpirationDate(), res.getExpirationDate());
