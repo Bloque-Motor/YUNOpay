@@ -44,10 +44,10 @@
 
     <properties>
         <sonar.login>67f279ab2accb9f55e3d90f07513f4ac06fa8542</sonar.login>
-        <!--<sonar.login>a839171d0dc6e7bbdb1597cb501a5481e516dc07</sonar.login>-->
+        <sonar.login>a839171d0dc6e7bbdb1597cb501a5481e516dc07</sonar.login>
         <sonar.host.url>http://costa.ls.fi.upm.es:9000/sonar</sonar.host.url>
-        <sonar.projectName>${groupId}:${artifactId}</sonar.projectName>
-        <sonar.projectKey>${groupId}:${artifactId}:${sonar.login}</sonar.projectKey>
+        <sonar.projectName>${project.groupId}:${project.artifactId}</sonar.projectName>
+        <sonar.projectKey>${project.groupId}:${project.artifactId}:${sonar.login}</sonar.projectKey>
         <sonar.coverage.exclusions>**/views/*,**/controllers/*</sonar.coverage.exclusions>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>

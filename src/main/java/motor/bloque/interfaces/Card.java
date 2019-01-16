@@ -7,6 +7,7 @@ import motor.bloque.exceptions.NegativeAmount;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 public interface Card {
 
     String getName();
