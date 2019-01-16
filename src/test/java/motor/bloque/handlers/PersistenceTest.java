@@ -58,7 +58,6 @@ class PersistenceTest {
         assertFalse(Persistence.existsCard("1111111"));
     }
 
-    //Esto lanza un nullpointer cuando se ejecuta desde terminal
     @Test
     void loadPersistence() throws NoSuchCard, IncorrectPin {
         Persistence.putCard(testCard);
@@ -78,4 +77,5 @@ class PersistenceTest {
     @Test
     void requestCredentials() {
     }
+
 }
