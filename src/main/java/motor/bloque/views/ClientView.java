@@ -5,6 +5,8 @@ import motor.bloque.controllers.*;
 import javax.swing.*;
 
 import java.awt.*;
+import java.util.EnumMap;
+import java.util.Map;
 
 import static javax.swing.GroupLayout.Alignment.*;
 import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
@@ -13,9 +15,11 @@ public class ClientView extends JFrame {
 
     private JPanel currentPanel;
 
+    private JTextField nameField;
+    private JTextField surnameField;
     private JTextField cardNumberField;
     private JTextField amountField;
-
+    private JPasswordField newPinField;
     private JPasswordField pinField;
     private JPasswordField confirmPinField;
 
@@ -33,6 +37,7 @@ public class ClientView extends JFrame {
     JButton cancelButton = new JButton("Cancel");
 
     public enum panels {MAIN, NEWCARD, PAY, RECHARGE, CHANGEPIN, CHECKBALANCE, CHECKMOVES, TICKET}
+    public enum formField {NAME, SURNAME, PIN, NEWPIN, CONFIRMPIN, AMOUNT, CARDNUMBER}
 
 
     public ClientView() {
@@ -122,20 +127,12 @@ public class ClientView extends JFrame {
     private void newCard() {
         GroupLayout gl = makeGL();
 
-        JTextField nameField = new JTextField(10);
-        nameField.getDocument().addDocumentListener(new NewCard.NameReader());
-
-        JTextField surnameField = new JTextField(10);
-        surnameField.getDocument().addDocumentListener(new NewCard.SurameReader());
-
+        nameField = new JTextField(10);
+        surnameField = new JTextField(10);
         pinField = new JPasswordField(4);
-        pinField.getDocument().addDocumentListener(new NewCard.PinReader());
-
         confirmPinField = new JPasswordField(4);
-        confirmPinField.getDocument().addDocumentListener(new NewCard.ConfirmPinReader());
-
         amountField = new JTextField(10);
-        amountField.getDocument().addDocumentListener(new NewCard.AmountReader());
+
 
 
         JButton okButton = new JButton("OK");
@@ -209,16 +206,10 @@ public class ClientView extends JFrame {
         GroupLayout gl = makeGL();
 
         cardNumberField = new JTextField(10);
-        cardNumberField.getDocument().addDocumentListener(new ChangePin.CardNumberReader());
-
         pinField = new JPasswordField(4);
-        pinField.getDocument().addDocumentListener(new ChangePin.PinReader());
-
-        JPasswordField newPinField = new JPasswordField(4);
-        newPinField.getDocument().addDocumentListener(new ChangePin.NewPinReader());
-
+        newPinField = new JPasswordField(4);
         confirmPinField = new JPasswordField(4);
-        confirmPinField.getDocument().addDocumentListener(new ChangePin.ConfirmPinReader());
+
 
         JButton okButton = new JButton("OK");
         okButton.setToolTipText(OKTT);
@@ -288,13 +279,9 @@ public class ClientView extends JFrame {
         switch (pane){
             case CHECKBALANCE:
                 okButton.addActionListener(new ConsultBalance.OkButton());
-                cardNumberField.getDocument().addDocumentListener(new ConsultBalance.CardNumberReader());
-                pinField.getDocument().addDocumentListener(new ConsultBalance.PinReader());
                 break;
             case CHECKMOVES:
                 okButton.addActionListener(new ConsultMovements.OkButton());
-                cardNumberField.getDocument().addDocumentListener(new ConsultMovements.CardNumberReader());
-                pinField.getDocument().addDocumentListener(new ConsultMovements.PinReader());
                 break;
             default:
                 okButton.addActionListener(new MainMenu.CancelButton());
@@ -345,15 +332,9 @@ public class ClientView extends JFrame {
         switch (pane){
             case PAY:
                 okButton.addActionListener(new Pay.OkButton());
-                cardNumberField.getDocument().addDocumentListener(new Pay.CardNumberReader());
-                pinField.getDocument().addDocumentListener(new Pay.PinReader());
-                amountField.getDocument().addDocumentListener(new Pay.AmountReader());
                 break;
             case RECHARGE:
                 okButton.addActionListener(new Recharge.OkButton());
-                cardNumberField.getDocument().addDocumentListener(new Recharge.CardNumberReader());
-                pinField.getDocument().addDocumentListener(new Recharge.PinReader());
-                amountField.getDocument().addDocumentListener(new Recharge.AmountReader());
                 break;
             default:
                 okButton.addActionListener(new MainMenu.CancelButton());
@@ -471,6 +452,18 @@ public class ClientView extends JFrame {
 
         getContentPane().doLayout();
         update(getGraphics());
+    }
+
+    public Map<formField, String> getFormData(){
+        EnumMap<formField, String> map = new EnumMap<>(formField.class);
+        if (nameField.getText() != null)  map.put(formField.NAME, nameField.getText());
+        if (surnameField.getText() != null)  map.put(formField.SURNAME, surnameField.getText());
+        if (cardNumberField.getText() != null)  map.put(formField.CARDNUMBER, cardNumberField.getText());
+        if (amountField.getText() != null)  map.put(formField.AMOUNT, amountField.getText());
+        if (newPinField.getPassword() != null)  map.put(formField.NEWPIN, newPinField.getPassword().toString());
+        if (pinField.getPassword() != null)  map.put(formField.PIN, pinField.getPassword().toString());
+        if (confirmPinField.getPassword() != null)  map.put(formField.CONFIRMPIN, confirmPinField.getPassword().toString());
+        return map;
     }
 
 }
