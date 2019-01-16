@@ -182,7 +182,7 @@ public class ClientView extends JFrame {
     }
 
     private void pay() {
-        setTitle("pay");
+        setTitle("Pay");
         makeCardPinAmountPanel(panels.PAY);
     }
 
