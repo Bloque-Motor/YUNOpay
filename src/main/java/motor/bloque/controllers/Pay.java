@@ -4,8 +4,7 @@ import motor.bloque.entities.CardMovement;
 import motor.bloque.exceptions.*;
 import motor.bloque.handlers.Persistence;
 import motor.bloque.interfaces.Card;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import motor.bloque.views.ClientView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -14,14 +13,9 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.Map;
-
-import motor.bloque.views.ClientView;
 public abstract class Pay extends AbstractAction {
 
     private static final String ERROR = "Error";
-    private static final String BL = "Bad Location";
-
-    private static final Logger logger = LogManager.getLogger(Pay.class);
 
     public static class OkButton implements ActionListener {
 

@@ -7,8 +7,6 @@ import motor.bloque.exceptions.NoSuchCard;
 import motor.bloque.handlers.Persistence;
 import motor.bloque.interfaces.Card;
 import motor.bloque.views.ClientView;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -21,8 +19,6 @@ import java.util.Map;
 public abstract class Recharge extends AbstractAction {
 
     private static final String ERROR = "Error";
-    private static final String BL = "Bad Location";
-    private static final Logger logger = LogManager.getLogger(Recharge.class);
 
     public static class OkButton implements ActionListener {
         @Override

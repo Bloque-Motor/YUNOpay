@@ -17,7 +17,6 @@ import java.util.Map;
 public abstract class ChangePin extends AbstractAction {
 
     private static final String ERROR = "Error";
-    private static final String BL = "Bad Location";
 
     private static final Logger logger = LogManager.getLogger(ChangePin.class);
 

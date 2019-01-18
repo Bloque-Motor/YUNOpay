@@ -18,7 +18,6 @@ import java.util.Map;
 public abstract class NewCard extends AbstractAction {
     private static final Logger logger = LogManager.getLogger(NewCard.class);
     private static final String ERROR = "Error";
-    private static final String BL = "Bad location";
 
     public static class OkButton implements ActionListener {
         @Override
