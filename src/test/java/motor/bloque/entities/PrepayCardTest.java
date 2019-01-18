@@ -17,17 +17,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class PrepayCardTest {
 
     private PrepayCard testCard;
+    private PrepayCard emptyCard;
     private String cardNumber;
-    private String emptyCardNumber;
 
     @BeforeEach
     void setPrepayCard() {
         testCard = new PrepayCard("TestName", "Test Surname", "1234", 0);
-        PrepayCard emptyCard = new PrepayCard();
+        emptyCard = new PrepayCard();
         Persistence.putCard(testCard);
-        Persistence.putCard(emptyCard);
         cardNumber = testCard.getNumber();
-        emptyCardNumber = emptyCard.getNumber();
     }
 
     @Test
@@ -103,7 +101,7 @@ class PrepayCardTest {
     @Test
     @DisplayName("PrepayCard recharge invalid card")
     void recharge3(){
-        assertThrows(NullPointerException.class, () ->Persistence.getCard(emptyCardNumber,"1111").recharge(10));
+        assertThrows(NullPointerException.class, () ->emptyCard.recharge(10));
     }
 
     @Test
@@ -143,7 +141,7 @@ class PrepayCardTest {
     @DisplayName("PrepayCard addMovement invalid card")
     void addMovement1() {
         Movement movement = new CardMovement(5);
-        assertThrows(NullPointerException.class, () ->Persistence.getCard(emptyCardNumber,"1111").addMovement(movement));
+        assertThrows(NullPointerException.class, () ->emptyCard.addMovement(movement));
 
     }
 
